@@ -349,6 +349,14 @@ table.t tr.is-today td { background: var(--gold-soft); }
 .rec-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--red); animation: blink 1s infinite; }
 @keyframes blink { 50% { opacity: .2; } }
 .err { color: var(--red); font-size: 14px; }
+.wa-row { display: flex; align-items: center; gap: 8px 14px; flex-wrap: wrap; }
+.btn.wa { background: #25D366; border-color: #25D366; color: #06381F; text-decoration: none; }
+.btn.wa[aria-disabled="true"] { background: var(--gray-soft); border-color: var(--line); color: var(--muted); pointer-events: none; }
+.photo-box { display: grid; gap: 10px; justify-items: start; padding: 12px; border: 1px dashed var(--line); border-radius: 12px; }
+.photo-actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.cin-thumb { display: block; max-width: 240px; max-height: 160px; object-fit: cover; border-radius: 10px; border: 1px solid var(--line); background: var(--gray-soft); }
+.cin-thumb.lg { max-width: 360px; max-height: 240px; cursor: zoom-in; }
+.plate { display: inline-block; margin-inline-start: 8px; padding: 0 7px; border: 1px solid var(--line); border-radius: 6px; font-size: 12px; font-weight: 600; color: var(--ink-2); letter-spacing: .3px; }
 .confirm-text { font-size: 17px; line-height: 1.7; }
 
 /* ---------- écrans d'accès ---------- */
@@ -443,7 +451,7 @@ table.t tr.is-today td { background: var(--gold-soft); }
 <div id="root"></div>
 <div id="toasts" aria-live="polite"></div>
 <script>
-const SETUP_SQL = "-- =====================================================================\n--  Delivery Manager — base de données Supabase\n--  À exécuter UNE fois : Supabase → SQL Editor → New query → coller → Run\n--  Le script peut être relancé sans risque (il ne supprime aucune donnée).\n-- =====================================================================\n\n-- ---------------------------------------------------------------------\n-- 1. Paramètres (une seule ligne)\n-- ---------------------------------------------------------------------\ncreate table if not exists public.settings (\n  id               smallint      primary key default 1 check (id = 1),\n  business_name    text          not null default 'Delivery Manager',\n  commission_rate  numeric(6,4)  not null default 0.15 check (commission_rate >= 0 and commission_rate <= 1),\n  low_balance      numeric(14,2) not null default 1000 check (low_balance >= 0),\n  currency         text          not null default 'أوقية',\n  updated_at       timestamptz   not null default now()\n);\ninsert into public.settings (id) values (1) on conflict (id) do nothing;\n\n-- ---------------------------------------------------------------------\n-- 2. Chauffeurs\n-- ---------------------------------------------------------------------\ncreate table if not exists public.drivers (\n  id          uuid        primary key default gen_random_uuid(),\n  phone       text        not null unique check (length(btrim(phone)) > 0),\n  name        text,\n  active      boolean     not null default true,\n  notes       text,\n  created_at  timestamptz not null default now()\n);\n\n-- ---------------------------------------------------------------------\n-- 3. Recharges du solde des chauffeurs\n-- ---------------------------------------------------------------------\ncreate table if not exists public.topups (\n  id          uuid          primary key default gen_random_uuid(),\n  driver_id   uuid          not null references public.drivers(id) on delete restrict,\n  amount      numeric(14,2) not null check (amount > 0),\n  method      text,\n  notes       text,\n  topup_at    timestamptz   not null default now(),\n  created_at  timestamptz   not null default now()\n);\ncreate index if not exists topups_driver_idx on public.topups (driver_id);\ncreate index if not exists topups_at_idx     on public.topups (topup_at);\n\n-- ---------------------------------------------------------------------\n-- 4. Commandes de livraison\n--    - commission_rate est figé à la création (copié depuis settings) :\n--      changer le taux plus tard ne modifie pas les anciennes commandes.\n--    - commission n'est due que si la commande est « completed ».\n-- ---------------------------------------------------------------------\ncreate sequence if not exists public.order_ref_seq;\n\ncreate table if not exists public.orders (\n  id               uuid          primary key default gen_random_uuid(),\n  ref              text          not null unique\n                                 default ('T-' || lpad(nextval('public.order_ref_seq')::text, 5, '0')),\n  ordered_at       timestamptz   not null default now(),\n  customer_phone   text          not null,\n  driver_id        uuid          not null references public.drivers(id) on delete restrict,\n  pickup           text          not null,\n  dropoff          text          not null,\n  price            numeric(14,2) not null check (price >= 0),\n  commission_rate  numeric(6,4)  not null check (commission_rate >= 0 and commission_rate <= 1),\n  status           text          not null default 'pending'\n                                 check (status in ('pending', 'completed', 'cancelled')),\n  commission       numeric(14,2) generated always as (\n                     case when status = 'completed' then round(price * commission_rate, 2) else 0 end\n                   ) stored,\n  completed_at     timestamptz,\n  voice_path       text,\n  notes            text,\n  created_at       timestamptz   not null default now()\n);\ncreate index if not exists orders_driver_idx on public.orders (driver_id);\ncreate index if not exists orders_at_idx     on public.orders (ordered_at);\ncreate index if not exists orders_status_idx on public.orders (status);\n\ncreate or replace function public.orders_before_write()\nreturns trigger\nlanguage plpgsql\nset search_path = public\nas $$\nbegin\n  if tg_op = 'INSERT' and new.commission_rate is null then\n    select s.commission_rate into new.commission_rate from public.settings s where s.id = 1;\n  end if;\n\n  if new.status = 'completed' then\n    if tg_op = 'INSERT' or old.status is distinct from 'completed' then\n      new.completed_at := coalesce(new.completed_at, now());\n    end if;\n  else\n    new.completed_at := null;\n  end if;\n\n  return new;\nend;\n$$;\n\ndrop trigger if exists orders_before_write on public.orders;\ncreate trigger orders_before_write\n  before insert or update on public.orders\n  for each row execute function public.orders_before_write();\n\n-- ---------------------------------------------------------------------\n-- 5. Soldes des chauffeurs : solde = recharges − commissions des commandes terminées\n-- ---------------------------------------------------------------------\ncreate or replace view public.driver_balances\nwith (security_invoker = true) as\nselect\n  d.id,\n  d.phone,\n  d.name,\n  d.active,\n  d.notes,\n  d.created_at,\n  coalesce(t.total_topups, 0)::numeric(14,2)                               as total_topups,\n  coalesce(o.total_commission, 0)::numeric(14,2)                           as total_commission,\n  coalesce(o.completed_orders, 0)::int                                     as completed_orders,\n  coalesce(o.pending_orders, 0)::int                                       as pending_orders,\n  (coalesce(t.total_topups, 0) - coalesce(o.total_commission, 0))::numeric(14,2) as balance,\n  t.last_topup_at\nfrom public.drivers d\nleft join (\n  select driver_id, sum(amount) as total_topups, max(topup_at) as last_topup_at\n  from public.topups\n  group by driver_id\n) t on t.driver_id = d.id\nleft join (\n  select driver_id,\n         sum(commission)                                as total_commission,\n         count(*) filter (where status = 'completed')   as completed_orders,\n         count(*) filter (where status = 'pending')     as pending_orders\n  from public.orders\n  group by driver_id\n) o on o.driver_id = d.id;\n\n-- ---------------------------------------------------------------------\n-- 6. Statistiques et rapports (heure de Nouakchott)\n-- ---------------------------------------------------------------------\ncreate or replace function public.dashboard_stats(p_day date)\nreturns json\nlanguage sql\nstable\nsecurity invoker\nset search_path = public\nas $$\n  with o as (\n    select (ordered_at at time zone 'Africa/Nouakchott')::date as d, status, price, commission\n    from public.orders\n  ),\n  t as (\n    select (topup_at at time zone 'Africa/Nouakchott')::date as d, amount\n    from public.topups\n  ),\n  m as (\n    select date_trunc('month', p_day::timestamp)::date                        as m0,\n           (date_trunc('month', p_day::timestamp) + interval '1 month')::date as m1\n  )\n  select json_build_object(\n    'day',              p_day,\n    'today_commission', coalesce((select sum(commission) from o where d = p_day), 0),\n    'today_value',      coalesce((select sum(price) from o where d = p_day and status = 'completed'), 0),\n    'today_completed',  (select count(*) from o where d = p_day and status = 'completed'),\n    'today_pending',    (select count(*) from o where d = p_day and status = 'pending'),\n    'today_cancelled',  (select count(*) from o where d = p_day and status = 'cancelled'),\n    'month_commission', coalesce((select sum(commission) from o, m where d >= m.m0 and d < m.m1), 0),\n    'total_commission', coalesce((select sum(commission) from o), 0),\n    'today_topups',     coalesce((select sum(amount) from t where d = p_day), 0),\n    'total_balance',    coalesce((select sum(balance) from public.driver_balances), 0),\n    'pending_total',    (select count(*) from o where status = 'pending')\n  );\n$$;\n\ncreate or replace function public.daily_report(p_month date)\nreturns table (day date, completed_orders int, orders_value numeric, commission numeric, topups numeric)\nlanguage sql\nstable\nsecurity invoker\nset search_path = public\nas $$\n  with b as (\n    select date_trunc('month', p_month::timestamp)::date                        as m0,\n           (date_trunc('month', p_month::timestamp) + interval '1 month')::date as m1\n  ),\n  days as (\n    select generate_series(b.m0, b.m1 - 1, interval '1 day')::date as day from b\n  ),\n  o as (\n    select (x.ordered_at at time zone 'Africa/Nouakchott')::date        as d,\n           count(*) filter (where x.status = 'completed')               as n,\n           coalesce(sum(x.price) filter (where x.status = 'completed'), 0) as v,\n           coalesce(sum(x.commission), 0)                               as c\n    from public.orders x, b\n    where x.ordered_at >= b.m0::timestamp - interval '1 day'\n      and x.ordered_at <  b.m1::timestamp + interval '1 day'\n    group by 1\n  ),\n  t as (\n    select (y.topup_at at time zone 'Africa/Nouakchott')::date as d, sum(y.amount) as s\n    from public.topups y, b\n    where y.topup_at >= b.m0::timestamp - interval '1 day'\n      and y.topup_at <  b.m1::timestamp + interval '1 day'\n    group by 1\n  )\n  select days.day,\n         coalesce(o.n, 0)::int,\n         coalesce(o.v, 0)::numeric,\n         coalesce(o.c, 0)::numeric,\n         coalesce(t.s, 0)::numeric\n  from days\n  left join o on o.d = days.day\n  left join t on t.d = days.day\n  order by days.day;\n$$;\n\ncreate or replace function public.monthly_report(p_year int)\nreturns table (month int, completed_orders int, orders_value numeric, commission numeric, topups numeric)\nlanguage sql\nstable\nsecurity invoker\nset search_path = public\nas $$\n  with months as (\n    select generate_series(1, 12) as month\n  ),\n  o as (\n    select extract(month from x.ordered_at at time zone 'Africa/Nouakchott')::int as m,\n           count(*) filter (where x.status = 'completed')                         as n,\n           coalesce(sum(x.price) filter (where x.status = 'completed'), 0)        as v,\n           coalesce(sum(x.commission), 0)                                         as c\n    from public.orders x\n    where extract(year from x.ordered_at at time zone 'Africa/Nouakchott')::int = p_year\n    group by 1\n  ),\n  t as (\n    select extract(month from y.topup_at at time zone 'Africa/Nouakchott')::int as m,\n           sum(y.amount) as s\n    from public.topups y\n    where extract(year from y.topup_at at time zone 'Africa/Nouakchott')::int = p_year\n    group by 1\n  )\n  select months.month,\n         coalesce(o.n, 0)::int,\n         coalesce(o.v, 0)::numeric,\n         coalesce(o.c, 0)::numeric,\n         coalesce(t.s, 0)::numeric\n  from months\n  left join o on o.m = months.month\n  left join t on t.m = months.month\n  order by months.month;\n$$;\n\n-- ---------------------------------------------------------------------\n-- 7. Sécurité\n--    Seuls les comptes listés dans app_users ont accès aux données.\n--    Le PREMIER compte créé dans Authentication → Users y est ajouté\n--    automatiquement (le gérant). Tout compte créé ensuite n'a accès à rien.\n-- ---------------------------------------------------------------------\ncreate table if not exists public.app_users (\n  user_id     uuid        primary key,\n  email       text,\n  created_at  timestamptz not null default now()\n);\nalter table public.app_users enable row level security;   -- aucune politique : invisible via l'API\n\ncreate or replace function public.is_app_user()\nreturns boolean\nlanguage sql\nstable\nsecurity definer\nset search_path = public\nas $$\n  select exists (select 1 from public.app_users where user_id = auth.uid());\n$$;\n\ncreate or replace function public.claim_first_user()\nreturns trigger\nlanguage plpgsql\nsecurity definer\nset search_path = public\nas $$\nbegin\n  if not exists (select 1 from public.app_users) then\n    insert into public.app_users (user_id, email) values (new.id, new.email);\n  end if;\n  return new;\nend;\n$$;\n\ndrop trigger if exists dm_claim_first_user on auth.users;\ncreate trigger dm_claim_first_user\n  after insert on auth.users\n  for each row execute function public.claim_first_user();\n\n-- si le compte du gérant existait déjà avant ce script\ninsert into public.app_users (user_id, email)\nselect u.id, u.email from auth.users u\nwhere not exists (select 1 from public.app_users)\norder by u.created_at\nlimit 1;\n\nalter table public.settings enable row level security;\nalter table public.drivers  enable row level security;\nalter table public.topups   enable row level security;\nalter table public.orders   enable row level security;\n\ndrop policy if exists \"settings_read\"   on public.settings;\ndrop policy if exists \"settings_update\" on public.settings;\ncreate policy \"settings_read\"   on public.settings for select to authenticated using (public.is_app_user());\ncreate policy \"settings_update\" on public.settings for update to authenticated using (public.is_app_user()) with check (id = 1 and public.is_app_user());\n\ndrop policy if exists \"drivers_all\" on public.drivers;\ncreate policy \"drivers_all\" on public.drivers for all to authenticated using (public.is_app_user()) with check (public.is_app_user());\n\ndrop policy if exists \"topups_all\" on public.topups;\ncreate policy \"topups_all\" on public.topups for all to authenticated using (public.is_app_user()) with check (public.is_app_user());\n\ndrop policy if exists \"orders_all\" on public.orders;\ncreate policy \"orders_all\" on public.orders for all to authenticated using (public.is_app_user()) with check (public.is_app_user());\n\nrevoke all on public.settings, public.drivers, public.topups, public.orders, public.driver_balances, public.app_users from anon;\nrevoke all on public.app_users from authenticated;\ngrant select, update                 on public.settings        to authenticated;\ngrant select, insert, update, delete on public.drivers         to authenticated;\ngrant select, insert, update, delete on public.topups          to authenticated;\ngrant select, insert, update, delete on public.orders          to authenticated;\ngrant select                         on public.driver_balances to authenticated;\ngrant usage, select on sequence public.order_ref_seq           to authenticated;\n\nrevoke execute on function public.dashboard_stats(date) from public, anon;\nrevoke execute on function public.daily_report(date)    from public, anon;\nrevoke execute on function public.monthly_report(int)   from public, anon;\ngrant  execute on function public.dashboard_stats(date) to authenticated;\ngrant  execute on function public.daily_report(date)    to authenticated;\ngrant  execute on function public.monthly_report(int)   to authenticated;\nrevoke execute on function public.is_app_user()       from public, anon;\ngrant  execute on function public.is_app_user()       to authenticated;\nrevoke execute on function public.claim_first_user()  from public, anon, authenticated;\n\n-- ---------------------------------------------------------------------\n-- 8. Stockage des messages vocaux (privé)\n-- ---------------------------------------------------------------------\ninsert into storage.buckets (id, name, public, file_size_limit)\nvalues ('voice', 'voice', false, 15728640)\non conflict (id) do nothing;\n\ndrop policy if exists \"voice_read\"   on storage.objects;\ndrop policy if exists \"voice_insert\" on storage.objects;\ndrop policy if exists \"voice_update\" on storage.objects;\ndrop policy if exists \"voice_delete\" on storage.objects;\ncreate policy \"voice_read\"   on storage.objects for select to authenticated using (bucket_id = 'voice' and public.is_app_user());\ncreate policy \"voice_insert\" on storage.objects for insert to authenticated with check (bucket_id = 'voice' and public.is_app_user());\ncreate policy \"voice_update\" on storage.objects for update to authenticated using (bucket_id = 'voice' and public.is_app_user()) with check (bucket_id = 'voice' and public.is_app_user());\ncreate policy \"voice_delete\" on storage.objects for delete to authenticated using (bucket_id = 'voice' and public.is_app_user());\n\n-- Fin. Ensuite : Authentication → Users → Add user (le compte du gérant, « Auto Confirm »).\n-- Pour donner accès à un 2e compte plus tard :\n--   insert into public.app_users (user_id, email)\n--   select id, email from auth.users where email = 'adresse@exemple.com';\n";
+const SETUP_SQL = "-- =====================================================================\n--  Delivery Manager — base de données Supabase\n--  À exécuter UNE fois : Supabase → SQL Editor → New query → coller → Run\n--  Le script peut être relancé sans risque (il ne supprime aucune donnée).\n-- =====================================================================\n\n-- ---------------------------------------------------------------------\n-- 1. Paramètres (une seule ligne)\n-- ---------------------------------------------------------------------\ncreate table if not exists public.settings (\n  id               smallint      primary key default 1 check (id = 1),\n  business_name    text          not null default 'Delivery Manager',\n  commission_rate  numeric(6,4)  not null default 0.15 check (commission_rate >= 0 and commission_rate <= 1),\n  low_balance      numeric(14,2) not null default 1000 check (low_balance >= 0),\n  currency         text          not null default 'أوقية',\n  updated_at       timestamptz   not null default now()\n);\ninsert into public.settings (id) values (1) on conflict (id) do nothing;\n\n-- ---------------------------------------------------------------------\n-- 2. Chauffeurs\n-- ---------------------------------------------------------------------\ncreate table if not exists public.drivers (\n  id          uuid        primary key default gen_random_uuid(),\n  phone       text        not null unique check (length(btrim(phone)) > 0),\n  name        text,\n  active      boolean     not null default true,\n  notes       text,\n  created_at  timestamptz not null default now()\n);\nalter table public.drivers add column if not exists cin_number     text;  -- numéro de la carte d'identité (NNI)\nalter table public.drivers add column if not exists plate_number   text;  -- matricule de la moto\nalter table public.drivers add column if not exists cin_photo_path text;  -- photo de la carte (stockage privé)\n\n-- ---------------------------------------------------------------------\n-- 3. Recharges du solde des chauffeurs\n-- ---------------------------------------------------------------------\ncreate table if not exists public.topups (\n  id          uuid          primary key default gen_random_uuid(),\n  driver_id   uuid          not null references public.drivers(id) on delete restrict,\n  amount      numeric(14,2) not null check (amount > 0),\n  method      text,\n  notes       text,\n  topup_at    timestamptz   not null default now(),\n  created_at  timestamptz   not null default now()\n);\ncreate index if not exists topups_driver_idx on public.topups (driver_id);\ncreate index if not exists topups_at_idx     on public.topups (topup_at);\n\n-- ---------------------------------------------------------------------\n-- 4. Commandes de livraison\n--    - commission_rate est figé à la création (copié depuis settings) :\n--      changer le taux plus tard ne modifie pas les anciennes commandes.\n--    - commission n'est due que si la commande est « completed ».\n-- ---------------------------------------------------------------------\ncreate sequence if not exists public.order_ref_seq;\n\ncreate table if not exists public.orders (\n  id               uuid          primary key default gen_random_uuid(),\n  ref              text          not null unique\n                                 default ('T-' || lpad(nextval('public.order_ref_seq')::text, 5, '0')),\n  ordered_at       timestamptz   not null default now(),\n  customer_phone   text          not null,\n  driver_id        uuid          not null references public.drivers(id) on delete restrict,\n  pickup           text          not null,\n  dropoff          text          not null,\n  price            numeric(14,2) not null check (price >= 0),\n  commission_rate  numeric(6,4)  not null check (commission_rate >= 0 and commission_rate <= 1),\n  status           text          not null default 'pending'\n                                 check (status in ('pending', 'completed', 'cancelled')),\n  commission       numeric(14,2) generated always as (\n                     case when status = 'completed' then round(price * commission_rate, 2) else 0 end\n                   ) stored,\n  completed_at     timestamptz,\n  voice_path       text,\n  notes            text,\n  created_at       timestamptz   not null default now()\n);\ncreate index if not exists orders_driver_idx on public.orders (driver_id);\ncreate index if not exists orders_at_idx     on public.orders (ordered_at);\ncreate index if not exists orders_status_idx on public.orders (status);\n\ncreate or replace function public.orders_before_write()\nreturns trigger\nlanguage plpgsql\nset search_path = public\nas $$\nbegin\n  if tg_op = 'INSERT' and new.commission_rate is null then\n    select s.commission_rate into new.commission_rate from public.settings s where s.id = 1;\n  end if;\n\n  if new.status = 'completed' then\n    if tg_op = 'INSERT' or old.status is distinct from 'completed' then\n      new.completed_at := coalesce(new.completed_at, now());\n    end if;\n  else\n    new.completed_at := null;\n  end if;\n\n  return new;\nend;\n$$;\n\ndrop trigger if exists orders_before_write on public.orders;\ncreate trigger orders_before_write\n  before insert or update on public.orders\n  for each row execute function public.orders_before_write();\n\n-- ---------------------------------------------------------------------\n-- 5. Soldes des chauffeurs : solde = recharges − commissions des commandes terminées\n-- ---------------------------------------------------------------------\ncreate or replace view public.driver_balances\nwith (security_invoker = true) as\nselect\n  d.id,\n  d.phone,\n  d.name,\n  d.active,\n  d.notes,\n  d.created_at,\n  coalesce(t.total_topups, 0)::numeric(14,2)                               as total_topups,\n  coalesce(o.total_commission, 0)::numeric(14,2)                           as total_commission,\n  coalesce(o.completed_orders, 0)::int                                     as completed_orders,\n  coalesce(o.pending_orders, 0)::int                                       as pending_orders,\n  (coalesce(t.total_topups, 0) - coalesce(o.total_commission, 0))::numeric(14,2) as balance,\n  t.last_topup_at,\n  d.cin_number,\n  d.plate_number,\n  d.cin_photo_path\nfrom public.drivers d\nleft join (\n  select driver_id, sum(amount) as total_topups, max(topup_at) as last_topup_at\n  from public.topups\n  group by driver_id\n) t on t.driver_id = d.id\nleft join (\n  select driver_id,\n         sum(commission)                                as total_commission,\n         count(*) filter (where status = 'completed')   as completed_orders,\n         count(*) filter (where status = 'pending')     as pending_orders\n  from public.orders\n  group by driver_id\n) o on o.driver_id = d.id;\n\n-- ---------------------------------------------------------------------\n-- 6. Statistiques et rapports (heure de Nouakchott)\n-- ---------------------------------------------------------------------\ncreate or replace function public.dashboard_stats(p_day date)\nreturns json\nlanguage sql\nstable\nsecurity invoker\nset search_path = public\nas $$\n  with o as (\n    select (ordered_at at time zone 'Africa/Nouakchott')::date as d, status, price, commission\n    from public.orders\n  ),\n  t as (\n    select (topup_at at time zone 'Africa/Nouakchott')::date as d, amount\n    from public.topups\n  ),\n  m as (\n    select date_trunc('month', p_day::timestamp)::date                        as m0,\n           (date_trunc('month', p_day::timestamp) + interval '1 month')::date as m1\n  )\n  select json_build_object(\n    'day',              p_day,\n    'today_commission', coalesce((select sum(commission) from o where d = p_day), 0),\n    'today_value',      coalesce((select sum(price) from o where d = p_day and status = 'completed'), 0),\n    'today_completed',  (select count(*) from o where d = p_day and status = 'completed'),\n    'today_pending',    (select count(*) from o where d = p_day and status = 'pending'),\n    'today_cancelled',  (select count(*) from o where d = p_day and status = 'cancelled'),\n    'month_commission', coalesce((select sum(commission) from o, m where d >= m.m0 and d < m.m1), 0),\n    'total_commission', coalesce((select sum(commission) from o), 0),\n    'today_topups',     coalesce((select sum(amount) from t where d = p_day), 0),\n    'total_balance',    coalesce((select sum(balance) from public.driver_balances), 0),\n    'pending_total',    (select count(*) from o where status = 'pending')\n  );\n$$;\n\ncreate or replace function public.daily_report(p_month date)\nreturns table (day date, completed_orders int, orders_value numeric, commission numeric, topups numeric)\nlanguage sql\nstable\nsecurity invoker\nset search_path = public\nas $$\n  with b as (\n    select date_trunc('month', p_month::timestamp)::date                        as m0,\n           (date_trunc('month', p_month::timestamp) + interval '1 month')::date as m1\n  ),\n  days as (\n    select generate_series(b.m0, b.m1 - 1, interval '1 day')::date as day from b\n  ),\n  o as (\n    select (x.ordered_at at time zone 'Africa/Nouakchott')::date        as d,\n           count(*) filter (where x.status = 'completed')               as n,\n           coalesce(sum(x.price) filter (where x.status = 'completed'), 0) as v,\n           coalesce(sum(x.commission), 0)                               as c\n    from public.orders x, b\n    where x.ordered_at >= b.m0::timestamp - interval '1 day'\n      and x.ordered_at <  b.m1::timestamp + interval '1 day'\n    group by 1\n  ),\n  t as (\n    select (y.topup_at at time zone 'Africa/Nouakchott')::date as d, sum(y.amount) as s\n    from public.topups y, b\n    where y.topup_at >= b.m0::timestamp - interval '1 day'\n      and y.topup_at <  b.m1::timestamp + interval '1 day'\n    group by 1\n  )\n  select days.day,\n         coalesce(o.n, 0)::int,\n         coalesce(o.v, 0)::numeric,\n         coalesce(o.c, 0)::numeric,\n         coalesce(t.s, 0)::numeric\n  from days\n  left join o on o.d = days.day\n  left join t on t.d = days.day\n  order by days.day;\n$$;\n\ncreate or replace function public.monthly_report(p_year int)\nreturns table (month int, completed_orders int, orders_value numeric, commission numeric, topups numeric)\nlanguage sql\nstable\nsecurity invoker\nset search_path = public\nas $$\n  with months as (\n    select generate_series(1, 12) as month\n  ),\n  o as (\n    select extract(month from x.ordered_at at time zone 'Africa/Nouakchott')::int as m,\n           count(*) filter (where x.status = 'completed')                         as n,\n           coalesce(sum(x.price) filter (where x.status = 'completed'), 0)        as v,\n           coalesce(sum(x.commission), 0)                                         as c\n    from public.orders x\n    where extract(year from x.ordered_at at time zone 'Africa/Nouakchott')::int = p_year\n    group by 1\n  ),\n  t as (\n    select extract(month from y.topup_at at time zone 'Africa/Nouakchott')::int as m,\n           sum(y.amount) as s\n    from public.topups y\n    where extract(year from y.topup_at at time zone 'Africa/Nouakchott')::int = p_year\n    group by 1\n  )\n  select months.month,\n         coalesce(o.n, 0)::int,\n         coalesce(o.v, 0)::numeric,\n         coalesce(o.c, 0)::numeric,\n         coalesce(t.s, 0)::numeric\n  from months\n  left join o on o.m = months.month\n  left join t on t.m = months.month\n  order by months.month;\n$$;\n\n-- ---------------------------------------------------------------------\n-- 7. Sécurité\n--    Seuls les comptes listés dans app_users ont accès aux données.\n--    Le PREMIER compte créé dans Authentication → Users y est ajouté\n--    automatiquement (le gérant). Tout compte créé ensuite n'a accès à rien.\n-- ---------------------------------------------------------------------\ncreate table if not exists public.app_users (\n  user_id     uuid        primary key,\n  email       text,\n  created_at  timestamptz not null default now()\n);\nalter table public.app_users enable row level security;   -- aucune politique : invisible via l'API\n\ncreate or replace function public.is_app_user()\nreturns boolean\nlanguage sql\nstable\nsecurity definer\nset search_path = public\nas $$\n  select exists (select 1 from public.app_users where user_id = auth.uid());\n$$;\n\ncreate or replace function public.claim_first_user()\nreturns trigger\nlanguage plpgsql\nsecurity definer\nset search_path = public\nas $$\nbegin\n  if not exists (select 1 from public.app_users) then\n    insert into public.app_users (user_id, email) values (new.id, new.email);\n  end if;\n  return new;\nend;\n$$;\n\ndrop trigger if exists dm_claim_first_user on auth.users;\ncreate trigger dm_claim_first_user\n  after insert on auth.users\n  for each row execute function public.claim_first_user();\n\n-- si le compte du gérant existait déjà avant ce script\ninsert into public.app_users (user_id, email)\nselect u.id, u.email from auth.users u\nwhere not exists (select 1 from public.app_users)\norder by u.created_at\nlimit 1;\n\nalter table public.settings enable row level security;\nalter table public.drivers  enable row level security;\nalter table public.topups   enable row level security;\nalter table public.orders   enable row level security;\n\ndrop policy if exists \"settings_read\"   on public.settings;\ndrop policy if exists \"settings_update\" on public.settings;\ncreate policy \"settings_read\"   on public.settings for select to authenticated using (public.is_app_user());\ncreate policy \"settings_update\" on public.settings for update to authenticated using (public.is_app_user()) with check (id = 1 and public.is_app_user());\n\ndrop policy if exists \"drivers_all\" on public.drivers;\ncreate policy \"drivers_all\" on public.drivers for all to authenticated using (public.is_app_user()) with check (public.is_app_user());\n\ndrop policy if exists \"topups_all\" on public.topups;\ncreate policy \"topups_all\" on public.topups for all to authenticated using (public.is_app_user()) with check (public.is_app_user());\n\ndrop policy if exists \"orders_all\" on public.orders;\ncreate policy \"orders_all\" on public.orders for all to authenticated using (public.is_app_user()) with check (public.is_app_user());\n\nrevoke all on public.settings, public.drivers, public.topups, public.orders, public.driver_balances, public.app_users from anon;\nrevoke all on public.app_users from authenticated;\ngrant select, update                 on public.settings        to authenticated;\ngrant select, insert, update, delete on public.drivers         to authenticated;\ngrant select, insert, update, delete on public.topups          to authenticated;\ngrant select, insert, update, delete on public.orders          to authenticated;\ngrant select                         on public.driver_balances to authenticated;\ngrant usage, select on sequence public.order_ref_seq           to authenticated;\n\nrevoke execute on function public.dashboard_stats(date) from public, anon;\nrevoke execute on function public.daily_report(date)    from public, anon;\nrevoke execute on function public.monthly_report(int)   from public, anon;\ngrant  execute on function public.dashboard_stats(date) to authenticated;\ngrant  execute on function public.daily_report(date)    to authenticated;\ngrant  execute on function public.monthly_report(int)   to authenticated;\nrevoke execute on function public.is_app_user()       from public, anon;\ngrant  execute on function public.is_app_user()       to authenticated;\nrevoke execute on function public.claim_first_user()  from public, anon, authenticated;\n\n-- ---------------------------------------------------------------------\n-- 8. Stockage des messages vocaux (privé)\n-- ---------------------------------------------------------------------\ninsert into storage.buckets (id, name, public, file_size_limit)\nvalues ('voice', 'voice', false, 15728640)\non conflict (id) do nothing;\n\ndrop policy if exists \"voice_read\"   on storage.objects;\ndrop policy if exists \"voice_insert\" on storage.objects;\ndrop policy if exists \"voice_update\" on storage.objects;\ndrop policy if exists \"voice_delete\" on storage.objects;\ncreate policy \"voice_read\"   on storage.objects for select to authenticated using (bucket_id = 'voice' and public.is_app_user());\ncreate policy \"voice_insert\" on storage.objects for insert to authenticated with check (bucket_id = 'voice' and public.is_app_user());\ncreate policy \"voice_update\" on storage.objects for update to authenticated using (bucket_id = 'voice' and public.is_app_user()) with check (bucket_id = 'voice' and public.is_app_user());\ncreate policy \"voice_delete\" on storage.objects for delete to authenticated using (bucket_id = 'voice' and public.is_app_user());\n\n-- ---------------------------------------------------------------------\n-- 9. Photos des cartes d'identité des chauffeurs (privé)\n-- ---------------------------------------------------------------------\ninsert into storage.buckets (id, name, public, file_size_limit)\nvalues ('driver-docs', 'driver-docs', false, 10485760)\non conflict (id) do nothing;\n\ndrop policy if exists \"docs_read\"   on storage.objects;\ndrop policy if exists \"docs_insert\" on storage.objects;\ndrop policy if exists \"docs_update\" on storage.objects;\ndrop policy if exists \"docs_delete\" on storage.objects;\ncreate policy \"docs_read\"   on storage.objects for select to authenticated using (bucket_id = 'driver-docs' and public.is_app_user());\ncreate policy \"docs_insert\" on storage.objects for insert to authenticated with check (bucket_id = 'driver-docs' and public.is_app_user());\ncreate policy \"docs_update\" on storage.objects for update to authenticated using (bucket_id = 'driver-docs' and public.is_app_user()) with check (bucket_id = 'driver-docs' and public.is_app_user());\ncreate policy \"docs_delete\" on storage.objects for delete to authenticated using (bucket_id = 'driver-docs' and public.is_app_user());\n\n-- Fin. Ensuite : Authentication → Users → Add user (le compte du gérant, « Auto Confirm »).\n-- Pour donner accès à un 2e compte plus tard :\n--   insert into public.app_users (user_id, email)\n--   select id, email from auth.users where email = 'adresse@exemple.com';\n";
 'use strict';
 /* =====================================================================
    Delivery Manager — نظام إدارة معاملات التوصيل وأرصدة السائقين
@@ -456,8 +464,9 @@ const CONFIG = {
   SUPABASE_URL: 'https://kykjdsaxyzrekesdhwac.supabase.co',
   SUPABASE_ANON_KEY: 'sb_publishable_-TuFb_00QHkjIvnfCvHGKg_9lGgbCjB',
 };
-const APP_VERSION = '1.0.0';
+const APP_VERSION = '1.1.0';
 const DEMO_BUILD = false; // true uniquement pour la version de démonstration
+const DOC_BUCKET = 'driver-docs';
 const SUPABASE_JS = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js';
 
 /* ---------- stockage local (protégé) ---------- */
@@ -501,6 +510,14 @@ const uid = () => (window.crypto && crypto.randomUUID ? crypto.randomUUID()
   : 'id-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10));
 const pick = (o, keys) => Object.fromEntries(keys.filter((k) => o[k] !== undefined).map((k) => [k, o[k]]));
 const cleanPhone = (v) => String(v || '').replace(/[^\d+]/g, '');
+/* Numéro au format international pour wa.me (Mauritanie : 8 chiffres → 222XXXXXXXX). */
+const waNumber = (v) => {
+  let d = String(v || '').replace(/[^\d+]/g, '');
+  if (d.startsWith('+')) d = d.slice(1); else if (d.startsWith('00')) d = d.slice(2);
+  d = d.replace(/\D/g, '');
+  if (d.length === 8) d = '222' + d;
+  return d.length >= 10 ? d : '';
+};
 const debounce = (fn, ms = 250) => { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; };
 
 const STATUS = {
@@ -536,6 +553,9 @@ const ICONS = {
   copy: '<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 00-1-1H5a1 1 0 00-1 1v10a1 1 0 001 1h3"/>',
   truck: '<path d="M3 16V7h10v9"/><path d="M13 10h4l3 3v3h-7"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/>',
   pause: '<path d="M9 6v12M15 6v12"/>',
+  whatsapp: '<path d="M4.5 19.5l1.2-3.6A8 8 0 1 1 8.4 18.6z"/><path d="M9.2 8.6c.2 2.6 3.6 6 6.2 6.2l.9-1.3-1.9-1-1 .9c-.9-.4-1.9-1.4-2.3-2.3l.9-1-1-1.9z"/>',
+  camera: '<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
+  idcard: '<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2.2"/><path d="M5.8 16c.6-1.6 1.8-2.4 3.2-2.4s2.6.8 3.2 2.4"/><path d="M14.5 10h4M14.5 13.5h3"/>',
 };
 const ic = (n) => `<svg class="i" viewBox="0 0 24 24" aria-hidden="true">${ICONS[n] || ''}</svg>`;
 
@@ -612,7 +632,7 @@ function errMsg(e) {
     return 'قاعدة البيانات غير مهيأة بعد. انسخ كود الإعداد وشغّله في Supabase (SQL Editor).';
   if (code === '42501' || m.includes('permission denied') || m.includes('row-level security'))
     return 'ليست لديك صلاحية لهذه العملية. سجّل الدخول بحساب المسير.';
-  if (m.includes('bucket not found')) return 'مساحة حفظ الرسائل الصوتية غير موجودة. أعد تشغيل كود الإعداد في Supabase.';
+  if (m.includes('bucket not found')) return 'مساحة حفظ الملفات غير موجودة. شغّل كود التحديث في Supabase (SQL Editor).';
   if (m.includes('payload too large') || m.includes('exceeded the maximum')) return 'الملف الصوتي كبير جداً (الحد 15 ميغابايت).';
   return 'حدث خطأ: ' + ((e && e.message) || e);
 }
@@ -650,6 +670,22 @@ function loadScript(src) {
   });
 }
 
+/* Réduit une photo (souvent 3 à 5 Mo sur iPhone) à environ 300 Ko en JPEG. */
+async function compressImage(file, max = 1600, quality = 0.82) {
+  try {
+    const url = URL.createObjectURL(file);
+    const img = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = url; });
+    const scale = Math.min(1, max / Math.max(img.naturalWidth || 1, img.naturalHeight || 1));
+    const w = Math.max(1, Math.round(img.naturalWidth * scale)), h = Math.max(1, Math.round(img.naturalHeight * scale));
+    const c = document.createElement('canvas');
+    c.width = w; c.height = h;
+    c.getContext('2d').drawImage(img, 0, 0, w, h);
+    URL.revokeObjectURL(url);
+    const blob = await new Promise((res) => c.toBlob(res, 'image/jpeg', quality));
+    return blob ? new File([blob], 'cin.jpg', { type: 'image/jpeg' }) : file;
+  } catch (e) { return file; }
+}
+
 /* =====================================================================
    COUCHE DE DONNÉES
    Les deux implémentations exposent exactement les mêmes méthodes.
@@ -679,7 +715,10 @@ class CloudAPI {
   listDrivers() { return this.run(this.sb.from('driver_balances').select('*').order('created_at', { ascending: true })); }
   getDriver(id) { return this.run(this.sb.from('driver_balances').select('*').eq('id', id).single()); }
   saveDriver(d) {
-    const row = { phone: cleanPhone(d.phone), name: d.name || null, notes: d.notes || null, active: d.active !== false };
+    const row = {
+      phone: cleanPhone(d.phone), name: d.name || null, notes: d.notes || null, active: d.active !== false,
+      cin_number: d.cin_number || null, plate_number: d.plate_number || null, cin_photo_path: d.cin_photo_path || null,
+    };
     return d.id ? this.run(this.sb.from('drivers').update(row).eq('id', d.id).select().single())
       : this.run(this.sb.from('drivers').insert(row).select().single());
   }
@@ -733,6 +772,20 @@ class CloudAPI {
     return data.signedUrl;
   }
   async deleteVoice(path) { try { await this.sb.storage.from('voice').remove([path]); } catch (e) { /* ignoré */ } }
+
+  async uploadDoc(file) {
+    const ext = (file.type || '').includes('png') ? 'png' : (file.type || '').includes('heic') ? 'heic' : 'jpg';
+    const path = `cin/${uid()}.${ext}`;
+    const { error } = await this.sb.storage.from(DOC_BUCKET).upload(path, file, { contentType: file.type || 'image/jpeg', upsert: false });
+    if (error) throw error;
+    return path;
+  }
+  async docUrl(path) {
+    const { data, error } = await this.sb.storage.from(DOC_BUCKET).createSignedUrl(path, 3600);
+    if (error) throw error;
+    return data.signedUrl;
+  }
+  async deleteDoc(path) { try { await this.sb.storage.from(DOC_BUCKET).remove([path]); } catch (e) { /* ignoré */ } }
 }
 
 function voiceExt(file) {
@@ -753,6 +806,7 @@ class DemoAPI {
   constructor() {
     this.mode = 'demo';
     this.voices = {};
+    this.docs = {};
     this.db = local.get('dm.demo');
     if (!this.db || !Array.isArray(this.db.orders)) { this.db = seedDemo(); this.save(); }
   }
@@ -788,8 +842,9 @@ class DemoAPI {
   async saveDriver(d) {
     const phone = cleanPhone(d.phone);
     if (this.db.drivers.some((x) => x.phone === phone && x.id !== d.id)) throw { code: '23505', message: 'duplicate' };
-    if (d.id) { Object.assign(this._drv(d.id), { phone, name: d.name || null, notes: d.notes || null, active: d.active !== false }); this.save(); return this._drv(d.id); }
-    const row = { id: uid(), phone, name: d.name || null, notes: d.notes || null, active: true, created_at: new Date().toISOString() };
+    const extra = { cin_number: d.cin_number || null, plate_number: d.plate_number || null, cin_photo_path: d.cin_photo_path || null };
+    if (d.id) { Object.assign(this._drv(d.id), { phone, name: d.name || null, notes: d.notes || null, active: d.active !== false, ...extra }); this.save(); return this._drv(d.id); }
+    const row = { id: uid(), phone, name: d.name || null, notes: d.notes || null, active: true, ...extra, created_at: new Date().toISOString() };
     this.db.drivers.push(row); this.save(); return row;
   }
   async deleteDriver(id) {
@@ -889,6 +944,9 @@ class DemoAPI {
   async uploadVoice(file) { const id = uid(); this.voices[id] = URL.createObjectURL(file); return 'demo/' + id; }
   async voiceUrl(path) { return this.voices[String(path).split('/').pop()] || null; }
   async deleteVoice() { }
+  async uploadDoc(file) { const id = uid(); this.docs[id] = URL.createObjectURL(file); return 'demo/' + id; }
+  async docUrl(path) { return this.docs[String(path).split('/').pop()] || null; }
+  async deleteDoc() { }
 }
 
 function seedDemo() {
@@ -898,8 +956,9 @@ function seedDemo() {
   const now = new Date();
   const at = (daysAgo, h, m) => { const d = new Date(now); d.setDate(d.getDate() - daysAgo); d.setHours(h, m, 0, 0); return d; };
   const drivers = [
-    ['44112233', 'سيدي محمد'], ['33445566', 'أحمد سالم'], ['22778899', 'محمد الأمين'], ['46123456', 'الشيخ ولد أحمد'],
-  ].map(([phone, name]) => ({ id: uid(), phone, name, active: true, notes: null, created_at: at(20, 9, 0).toISOString() }));
+    ['44112233', 'سيدي محمد', '1234567801', '2235 MA 00'], ['33445566', 'أحمد سالم', '1234567802', '4410 MB 00'],
+    ['22778899', 'محمد الأمين', '1234567803', '1876 MA 00'], ['46123456', 'الشيخ ولد أحمد', '1234567804', '3092 MC 00'],
+  ].map(([phone, name, cin, plate]) => ({ id: uid(), phone, name, cin_number: cin, plate_number: plate, cin_photo_path: null, active: true, notes: null, created_at: at(20, 9, 0).toISOString() }));
   const topups = [];
   const addTop = (di, daysAgo, amount, method) => topups.push({ id: uid(), driver_id: drivers[di].id, amount, method, notes: null, topup_at: at(daysAgo, 8, 10 + topups.length).toISOString(), created_at: at(daysAgo, 8, 10).toISOString() });
   addTop(0, 13, 10000, 'نقداً'); addTop(1, 13, 8000, 'Bankily'); addTop(2, 12, 6000, 'Masrvi'); addTop(3, 12, 4000, 'نقداً');
@@ -1278,14 +1337,14 @@ async function viewDrivers(seq) {
   const q = f.q.trim().toLowerCase();
   const list = app.drivers
     .filter((d) => (f.show === 'all' || (f.show === 'active' ? d.active : !d.active)))
-    .filter((d) => !q || String(d.name || '').toLowerCase().includes(q) || String(d.phone).includes(q))
+    .filter((d) => !q || [d.name, d.phone, d.cin_number, d.plate_number].some((x) => String(x || '').toLowerCase().includes(q)))
     .sort((a, b) => num(a.balance) - num(b.balance));
   app.last.drivers = list;
   paint(seq, `
     <section class="panel">
       <div class="filters">
         ${chips('drivers', 'show', [['active', 'النشطون'], ['inactive', 'الموقوفون'], ['all', 'الكل']], f.show)}
-        <label class="search">${ic('search')}<span class="sr-only">بحث</span><input class="input" type="search" placeholder="بحث بالاسم أو الرقم" value="${esc(f.q)}" data-filter="drivers.q"></label>
+        <label class="search">${ic('search')}<span class="sr-only">بحث</span><input class="input" type="search" placeholder="بحث بالاسم أو الهاتف أو اللوحة" value="${esc(f.q)}" data-filter="drivers.q"></label>
         <span style="flex:1"></span>
         <button type="button" class="btn sm ghost" data-action="export-drivers">${ic('download')} تصدير CSV</button>
         <button type="button" class="btn primary" data-action="new-driver">${ic('plus')} سائق جديد</button>
@@ -1301,7 +1360,7 @@ async function viewDrivers(seq) {
         const w = tt > 0 ? Math.max(0, Math.min(100, (b / tt) * 100)) : 0;
         const cls = b < 0 ? 'neg' : b < lowLimit() ? 'low' : '';
         return `<article class="drow ${d.active ? '' : 'off'}" data-action="open-driver" data-id="${d.id}" tabindex="0" role="button" aria-label="كشف حساب ${esc(dtext(d))}">
-          <div class="d-id"><b>${esc(d.name || 'بدون اسم')}</b><span class="ltr">${esc(d.phone)}</span></div>
+          <div class="d-id"><b>${esc(d.name || 'بدون اسم')}</b><span class="ltr">${esc(d.phone)}</span>${d.plate_number ? `<span class="plate ltr">${esc(d.plate_number)}</span>` : ''}</div>
           <div class="d-bal"><div class="d-bal-line"><span class="muted">الرصيد</span><b class="${b < 0 ? 'neg-text' : ''}">${money(b)}</b><span class="muted">${cur()}</span>${balanceFlag(d)}</div>
             <div class="meter ${cls}" role="img" aria-label="المتبقي من الشحن ${Math.round(w)}%"><i style="width:${w}%"></i></div></div>
           <div class="d-stats"><span>شحن ${money(tt)}</span><span>عمولات ${money(d.total_commission)}</span><span>طلبات مكتملة: ${num(d.completed_orders)}</span>${num(d.pending_orders) ? `<span>قيد التنفيذ: ${num(d.pending_orders)}</span>` : ''}</div>
@@ -1330,6 +1389,7 @@ async function viewDriver(seq) {
       <header class="st-head">
         <div><h2>كشف حساب سائق</h2><p class="muted">${esc(app.settings.business_name)}</p></div>
         <dl><dt>رقم السائق</dt><dd><span class="ltr">${esc(d.phone)}</span></dd><dt>الاسم</dt><dd>${esc(d.name || '—')}</dd>
+          <dt>بطاقة التعريف</dt><dd><span class="ltr">${esc(d.cin_number || '—')}</span></dd><dt>لوحة الدراجة</dt><dd><span class="ltr">${esc(d.plate_number || '—')}</span></dd>
           <dt>تاريخ الكشف</dt><dd>${fmtDate(new Date())}</dd><dt>الحالة</dt><dd>${d.active ? 'نشط' : 'موقوف'}</dd></dl>
       </header>
       <table class="t st-sum">
@@ -1338,6 +1398,10 @@ async function viewDriver(seq) {
           <tr><td>مجموع العمولات (طلبات مكتملة: ${num(d.completed_orders)})</td><td class="n">${money(d.total_commission)}</td></tr></tbody>
         <tfoot><tr><td>الرصيد المتبقي</td><td class="n ${b < 0 ? 'neg' : ''}">${money(b)}</td></tr></tfoot>
       </table>
+      <div class="st-section no-print"><h3>صورة بطاقة التعريف</h3>
+        ${d.cin_photo_path ? '<img class="cin-thumb lg" data-cin alt="صورة بطاقة التعريف" tabindex="0">'
+          : `<p class="notice">${ic('alert')} لم تُرفق صورة بطاقة التعريف بعد. <button type="button" class="btn sm" data-action="edit-driver" data-id="${d.id}">${ic('camera')} إضافة الصورة</button></p>`}
+      </div>
       ${pending.length ? `<p class="notice">طلبات قيد التنفيذ لهذا السائق: ${pending.length}. تُخصم عمولتها عند إكمالها.</p>` : ''}
       <div class="st-section"><h3>سجل الشحن</h3>
         ${tops.length ? `<div class="table-wrap"><table class="t"><thead><tr><th>التاريخ</th><th>طريقة الدفع</th><th>ملاحظات</th><th class="n">المبلغ</th><th class="no-print"></th></tr></thead>
@@ -1353,7 +1417,17 @@ async function viewDriver(seq) {
           <tfoot><tr><td colspan="3">المجموع</td><td class="n">${money(sumOf(done, 'price'))}</td><td class="n">${money(sumOf(done, 'commission'))}</td></tr></tfoot></table></div>`
           : '<p class="muted">لا توجد طلبات مكتملة.</p>'}
       </div>
-    </section>`);
+    </section>`, (main) => {
+    const img = $('img[data-cin]', main);
+    if (!img) return;
+    app.api.docUrl(d.cin_photo_path).then((u) => {
+      if (!u) { img.outerHTML = '<p class="muted">الصورة غير متوفرة في الوضع التجريبي بعد إعادة التحميل.</p>'; return; }
+      img.src = u;
+      const open = () => showModal({ title: `بطاقة التعريف – ${d.name || d.phone}`, wide: true, html: `<img src="${esc(u)}" alt="صورة بطاقة التعريف" style="width:100%;border-radius:12px">` });
+      img.addEventListener('click', open);
+      img.addEventListener('keydown', (e) => { if (e.key === 'Enter') open(); });
+    }).catch((e) => { img.outerHTML = `<p class="err">${esc(errMsg(e))}</p>`; });
+  });
 }
 
 /* ---------- recharges ---------- */
@@ -1577,6 +1651,8 @@ async function orderForm(o = null) {
     <label class="field"><span>سعر التوصيل (${cur()})</span><input class="input" type="number" inputmode="decimal" min="0" step="any" name="price" value="${o ? num(o.price) : ''}" required></label>
     <div class="field"><span>الحالة</span><div class="seg" role="radiogroup" aria-label="الحالة">${statuses.map((s) => `<label><input type="radio" name="status" value="${s}" ${(o ? o.status : 'pending') === s ? 'checked' : ''}><span>${STATUS[s].label}</span></label>`).join('')}</div></div>
     <div class="calc full" data-calc aria-live="polite"></div>
+    <div class="wa-row full"><a class="btn wa" data-wa target="_blank" rel="noopener" aria-disabled="true">${ic('whatsapp')} إرسال بيانات السائق للزبون عبر واتساب</a>
+      <small class="muted" data-wa-hint>اختر السائق وأدخل رقم الزبون والمسار لتفعيل الزر.</small></div>
     <div class="field full"><span>الرسالة الصوتية</span><div class="voice-box" data-voice></div></div>
     <label class="field full"><span>ملاحظات</span><textarea class="input" name="notes" rows="2">${esc(o ? o.notes || '' : '')}</textarea></label>
     <p class="err full" data-err hidden></p>
@@ -1617,14 +1693,41 @@ async function orderForm(o = null) {
           + (a.drv ? `<span>رصيد السائق ${v.status === 'completed' ? 'بعد الخصم' : 'الحالي'}: <b>${money(a.bal)}</b> ${cur()}</span>` : '')
           + (v.status === 'completed' ? '' : '<span>تُخصم العمولة من رصيد السائق عند إكمال الطلب فقط.</span>');
       };
+      const wa = $('[data-wa]', m), waHint = $('[data-wa-hint]', m);
+      const updWa = () => {
+        const val = values();
+        const drv = app.drivers.find((d) => d.id === val.driver_id);
+        const to = waNumber(val.customer_phone);
+        if (!drv || !to || !val.pickup || !val.dropoff) {
+          wa.removeAttribute('href'); wa.setAttribute('aria-disabled', 'true'); waHint.hidden = false; return;
+        }
+        const lines = [
+          'مرحباً،',
+          'تم تأكيد طلب التوصيل الخاص بكم.',
+          isEdit ? `رقم الطلب: ${o.ref}` : null,
+          val.date && val.time ? `التاريخ والوقت: ${fmtDate(val.date)} ${val.time}` : null,
+          `من: ${val.pickup}`,
+          `إلى: ${val.dropoff}`,
+          val.price !== '' ? `سعر التوصيل: ${money(val.price)} ${curText()}` : null,
+          '',
+          `السائق: ${drv.name || '—'}`,
+          `هاتف السائق: ${drv.phone}`,
+          drv.plate_number ? `رقم لوحة الدراجة: ${drv.plate_number}` : null,
+          '',
+          `شكراً لثقتكم – ${app.settings.business_name}`,
+        ].filter((x) => x !== null);
+        wa.href = `https://wa.me/${to}?text=${encodeURIComponent(lines.join('\n'))}`;
+        wa.removeAttribute('aria-disabled'); waHint.hidden = true;
+      };
       form.addEventListener('input', upd); form.addEventListener('change', upd); upd();
+      form.addEventListener('input', updWa); form.addEventListener('change', updWa); updWa();
 
       $('[data-add-driver]', m).onclick = async () => {
         const nd = await driverForm();
         if (!nd) return;
         const sel = $('select[name=driver_id]', form);
         sel.innerHTML = `<option value="">اختر السائق</option>${driverOptions(nd.id, o && o.driver_id)}`;
-        upd();
+        upd(); updWa();
       };
       const del = $('[data-del]', m);
       if (del) del.onclick = async () => {
@@ -1735,11 +1838,49 @@ async function topupForm(driverId = null) {
   return res;
 }
 
+function photoWidget(box, existingPath) {
+  const st = { file: null, url: null, removed: false };
+  const draw = async () => {
+    const showExisting = existingPath && !st.removed && !st.file;
+    const has = !!(st.file || showExisting);
+    box.innerHTML = `${st.file ? `<img class="cin-thumb" src="${st.url}" alt="صورة بطاقة التعريف">` : ''}${showExisting ? '<img class="cin-thumb" data-existing alt="صورة بطاقة التعريف">' : ''}
+      <div class="photo-actions">
+        <label class="btn sm">${ic('camera')} ${has ? 'تغيير الصورة' : 'تصوير البطاقة أو اختيار صورة'}<input type="file" class="sr-only" accept="image/*" data-p="file"></label>
+        ${has ? `<button type="button" class="btn sm ghost" data-p="clear">${ic('trash')} حذف الصورة</button>` : '<span class="muted" style="font-size:14px">لم تُرفق صورة بعد</span>'}
+      </div>`;
+    if (showExisting) {
+      const img = $('img[data-existing]', box);
+      try {
+        const u = await app.api.docUrl(existingPath);
+        if (u) img.src = u; else img.outerHTML = '<span class="muted">الصورة غير متوفرة في الوضع التجريبي بعد إعادة التحميل.</span>';
+      } catch (e) { img.outerHTML = `<span class="err">${esc(errMsg(e))}</span>`; }
+    }
+  };
+  box.addEventListener('click', (e) => {
+    const b = e.target.closest('button[data-p]');
+    if (b && b.dataset.p === 'clear') { st.file = null; st.removed = true; draw(); }
+  });
+  box.addEventListener('change', (e) => {
+    if (!e.target.matches('[data-p=file]')) return;
+    const f = e.target.files && e.target.files[0]; if (!f) return;
+    if (!/^image\//.test(f.type) && !/\.(heic|heif|jpe?g|png|webp)$/i.test(f.name)) { toast('اختر صورة لبطاقة التعريف.', 'warn'); return; }
+    if (f.size > 25 * 1024 * 1024) { toast('الصورة كبيرة جداً.', 'bad'); return; }
+    if (st.url) URL.revokeObjectURL(st.url);
+    st.file = f; st.url = URL.createObjectURL(f); st.removed = true; draw();
+  });
+  draw();
+  return { get file() { return st.file; }, get removed() { return st.removed; } };
+}
+
 async function driverForm(d = null) {
   const isEdit = !!d;
   const html = `<form class="form-grid" novalidate>
     <label class="field"><span>رقم هاتف السائق</span><input class="input" type="tel" inputmode="tel" dir="ltr" name="phone" value="${esc(d ? d.phone : '')}" autocomplete="off" required></label>
-    <label class="field"><span>الاسم</span><input class="input" name="name" value="${esc(d ? d.name || '' : '')}" autocomplete="off"></label>
+    <label class="field"><span>الاسم الكامل</span><input class="input" name="name" value="${esc(d ? d.name || '' : '')}" autocomplete="off"></label>
+    <label class="field"><span>رقم بطاقة التعريف (NNI)</span><input class="input" name="cin_number" inputmode="numeric" dir="ltr" value="${esc(d ? d.cin_number || '' : '')}" autocomplete="off" required></label>
+    <label class="field"><span>رقم لوحة الدراجة (Matricule)</span><input class="input" name="plate_number" dir="ltr" autocapitalize="characters" value="${esc(d ? d.plate_number || '' : '')}" autocomplete="off" required></label>
+    <div class="field full"><span>صورة بطاقة التعريف</span><div class="photo-box" data-photo></div>
+      <small>صوّر البطاقة بوضوح. تُحفظ الصورة في مساحة خاصة لا يطّلع عليها إلا حساب المسير.</small></div>
     ${isEdit ? `<div class="field full"><span>الحالة</span><div class="seg"><label><input type="radio" name="active" value="1" ${d.active ? 'checked' : ''}><span>نشط</span></label>
       <label><input type="radio" name="active" value="0" ${d.active ? '' : 'checked'}><span>موقوف</span></label></div>
       <small>السائق الموقوف لا يظهر عند تسجيل طلب جديد، ويبقى سجله محفوظاً.</small></div>` : ''}
@@ -1748,32 +1889,46 @@ async function driverForm(d = null) {
     <div class="modal-actions full">
       ${isEdit ? `<button type="button" class="btn warn-soft" data-del style="margin-inline-end:auto">${ic('trash')} حذف السائق</button>` : ''}
       <button type="button" class="btn ghost" data-close>رجوع</button>
-      <button type="submit" class="btn primary">${isEdit ? 'حفظ التعديلات' : 'إضافة السائق'}</button></div>
+      <button type="submit" class="btn primary">${isEdit ? 'حفظ التعديلات' : 'تسجيل السائق'}</button></div>
   </form>`;
   const res = await showModal({
-    title: isEdit ? 'تعديل بيانات السائق' : 'سائق جديد', html,
+    title: isEdit ? 'تعديل بيانات السائق' : 'تسجيل سائق جديد', html, wide: true,
     onMount: (m, close) => {
       const form = $('form', m), err = $('[data-err]', m);
-      const fail = (msg) => { err.textContent = msg; err.hidden = false; };
+      const pw = photoWidget($('[data-photo]', m), d && d.cin_photo_path);
+      const fail = (msg) => { err.textContent = msg; err.hidden = false; err.scrollIntoView({ block: 'nearest' }); };
       const del = $('[data-del]', m);
       if (del) del.onclick = async () => {
         if (!(await confirmBox(`حذف السائق ${dtext(d)}؟`, { ok: 'حذف', danger: true }))) return;
-        try { await app.api.deleteDriver(d.id); toast('تم حذف السائق.'); close('deleted'); } catch (e) { fail(errMsg(e)); }
+        try {
+          await app.api.deleteDriver(d.id);
+          if (d.cin_photo_path) app.api.deleteDoc(d.cin_photo_path);
+          toast('تم حذف السائق.'); close('deleted');
+        } catch (e) { fail(errMsg(e)); }
       };
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
         const fd = new FormData(form);
         const phone = cleanPhone(fd.get('phone'));
+        const cin = String(fd.get('cin_number') || '').trim();
+        const plate = String(fd.get('plate_number') || '').trim().toUpperCase();
         if (phone.length < 4) return fail('أدخل رقم هاتف السائق.');
+        if (cin.length < 4) return fail('أدخل رقم بطاقة التعريف.');
+        if (plate.length < 2) return fail('أدخل رقم لوحة الدراجة.');
+        err.hidden = true;
         const btn = $('[type=submit]', form);
         busy(btn, true, 'جارٍ الحفظ');
         try {
+          let photo = d ? d.cin_photo_path || null : null;
+          if (pw.file) photo = await app.api.uploadDoc(await compressImage(pw.file));
+          else if (pw.removed) photo = null;
           const saved = await app.api.saveDriver({
             id: d ? d.id : undefined, phone, name: String(fd.get('name') || '').trim(), notes: String(fd.get('notes') || '').trim(),
-            active: isEdit ? fd.get('active') === '1' : true,
+            active: isEdit ? fd.get('active') === '1' : true, cin_number: cin, plate_number: plate, cin_photo_path: photo,
           });
+          if (d && d.cin_photo_path && d.cin_photo_path !== photo) app.api.deleteDoc(d.cin_photo_path);
           await loadDrivers();
-          toast(isEdit ? 'تم حفظ بيانات السائق.' : `تمت إضافة السائق ${dtext(saved)}.`);
+          toast(isEdit ? 'تم حفظ بيانات السائق.' : `تم تسجيل السائق ${dtext(saved)}.`);
           close(saved);
         } catch (ex) { busy(btn, false); fail(errMsg(ex)); }
       });
@@ -1842,8 +1997,8 @@ const ACTIONS = {
     ...(app.last.topups || []).map((t) => [fmtDate(t.topup_at), fmtTime(t.topup_at), t.driver ? t.driver.phone : '', t.driver ? t.driver.name || '' : '', t.method || '', num(t.amount), t.notes || '']),
   ]),
   'export-drivers': () => downloadCSV(`drivers-${today()}.csv`, [
-    ['رقم السائق', 'الاسم', 'الحالة', 'مجموع الشحن', 'مجموع العمولات', 'الرصيد المتبقي', 'طلبات مكتملة', 'قيد التنفيذ'],
-    ...(app.last.drivers || app.drivers).map((d) => [d.phone, d.name || '', d.active ? 'نشط' : 'موقوف', num(d.total_topups), num(d.total_commission), num(d.balance), num(d.completed_orders), num(d.pending_orders)]),
+    ['رقم السائق', 'الاسم', 'رقم بطاقة التعريف', 'رقم لوحة الدراجة', 'الحالة', 'مجموع الشحن', 'مجموع العمولات', 'الرصيد المتبقي', 'طلبات مكتملة', 'قيد التنفيذ'],
+    ...(app.last.drivers || app.drivers).map((d) => [d.phone, d.name || '', d.cin_number || '', d.plate_number || '', d.active ? 'نشط' : 'موقوف', num(d.total_topups), num(d.total_commission), num(d.balance), num(d.completed_orders), num(d.pending_orders)]),
   ]),
   'export-daily': () => downloadCSV(`daily-${app.f.reports.month.slice(0, 7)}.csv`, [
     ['اليوم', 'طلبات مكتملة', 'قيمة التوصيل', 'العمولة', 'الشحن'],
