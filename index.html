@@ -464,7 +464,7 @@ const CONFIG = {
   SUPABASE_URL: 'https://kykjdsaxyzrekesdhwac.supabase.co',
   SUPABASE_ANON_KEY: 'sb_publishable_-TuFb_00QHkjIvnfCvHGKg_9lGgbCjB',
 };
-const APP_VERSION = '1.1.0';
+const APP_VERSION = '1.1.1';
 const DEMO_BUILD = false; // true uniquement pour la version de démonstration
 const DOC_BUCKET = 'driver-docs';
 const SUPABASE_JS = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js';
@@ -1792,8 +1792,9 @@ async function topupForm(driverId = null) {
     <div class="field full"><span>السائق</span><div class="inline-row">
       <select class="input" name="driver_id" required aria-label="السائق"><option value="">اختر السائق</option>${driverOptions(driverId)}</select>
       <button type="button" class="icon-btn" data-add-driver aria-label="إضافة سائق جديد">${ic('plus')}</button></div></div>
-    <label class="field"><span>مبلغ الشحن (${cur()})</span><input class="input" type="number" inputmode="decimal" min="0" step="any" name="amount" required></label>
+    <label class="field full"><span>مبلغ الشحن (${cur()})</span><input class="input" type="number" inputmode="decimal" min="0" step="any" name="amount" required></label>
     <label class="field"><span>التاريخ</span><input class="input" type="date" name="date" value="${today()}" required></label>
+    <label class="field"><span>الوقت</span><input class="input" type="time" name="time" value="${pad(new Date().getHours())}:${pad(new Date().getMinutes())}" required></label>
     <div class="field full"><span>طريقة الدفع</span><div class="seg" style="flex-wrap:wrap">${METHODS.map((mt, i) => `<label><input type="radio" name="method" value="${esc(mt)}" ${i === 0 ? 'checked' : ''}><span>${esc(mt)}</span></label>`).join('')}</div></div>
     <div class="calc full" data-calc aria-live="polite"></div>
     <label class="field full"><span>ملاحظات</span><input class="input" name="notes" autocomplete="off"></label>
@@ -1823,7 +1824,9 @@ async function topupForm(driverId = null) {
         if (!d) return fail('اختر السائق.');
         if (!(amount > 0)) return fail('أدخل مبلغ الشحن.');
         const date = fd.get('date') || today();
-        const when = date === today() ? new Date() : new Date(`${date}T12:00`);
+        const time = fd.get('time') || '12:00';
+        const when = new Date(`${date}T${time}`);
+        if (Number.isNaN(when.getTime())) return fail('تحقق من التاريخ والوقت.');
         const btn = $('[type=submit]', form);
         busy(btn, true, 'جارٍ الحفظ');
         try {
