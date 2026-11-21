@@ -1,0 +1,2018 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Delivery Manager – نظام إدارة معاملات التوصيل وأرصدة السائقين</title>
+<meta name="description" content="إدارة طلبات التوصيل وشحن أرصدة السائقين والعمولات والأرباح اليومية والشهرية">
+<meta name="theme-color" content="#0B6A4A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Delivery">
+<meta name="format-detection" content="telephone=no">
+<link rel="apple-touch-icon" href="data:image/png;base64,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">
+<link rel="icon" type="image/png" href="data:image/png;base64,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">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300;400;500;600&display=swap">
+<style>
+:root {
+  --bg: #EDF1EF;
+  --card: #FFFFFF;
+  --ink: #15211C;
+  --ink-2: #3F4F48;
+  --muted: #66766F;
+  --line: #D6DEDA;
+  --line-2: #E7ECE9;
+  --green: #0B6A4A;
+  --green-ink: #07503A;
+  --green-soft: #E1EFE8;
+  --chart: #0F7D57;
+  --gold: #E7A90E;
+  --gold-ink: #6E4B00;
+  --gold-soft: #FCF1D2;
+  --red: #B42318;
+  --red-soft: #FCE9E7;
+  --blue: #1D59A6;
+  --blue-soft: #E4EDF8;
+  --gray-soft: #EEF0EF;
+  --r-s: 8px;
+  --r: 14px;
+  --r-l: 22px;
+  --shadow: 0 1px 2px rgba(18, 30, 25, .05), 0 6px 18px rgba(18, 30, 25, .05);
+  --side: 236px;
+  --font: 'Readex Pro', 'Geeza Pro', 'SF Arabic', 'Segoe UI', Tahoma, sans-serif;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--ink);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+button, input, select, textarea { font: inherit; color: inherit; }
+a { color: var(--green); }
+h1, h2, h3, p { margin: 0; }
+.num, .money, td, .orow, .kpi-value, .hero-value { font-variant-numeric: tabular-nums; }
+.ltr { direction: ltr; unicode-bidi: isolate; display: inline-block; }
+.muted { color: var(--muted); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+:focus-visible { outline: 3px solid color-mix(in srgb, var(--green) 55%, white); outline-offset: 2px; }
+svg.i { width: 20px; height: 20px; flex: none; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ---------- boutons ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 44px; padding: 0 18px;
+  border: 1px solid var(--line); border-radius: 12px;
+  background: var(--card); color: var(--ink);
+  font-weight: 500; cursor: pointer; white-space: nowrap;
+  transition: background .15s, border-color .15s, transform .05s;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn:active { transform: translateY(1px); }
+.btn:disabled { opacity: .55; cursor: default; }
+.btn.primary { background: var(--green); border-color: var(--green); color: #fff; }
+.btn.primary:hover { background: var(--green-ink); }
+.btn.gold { background: var(--gold); border-color: var(--gold); color: #2B1E00; }
+.btn.danger { background: var(--red); border-color: var(--red); color: #fff; }
+.btn.ghost { background: transparent; }
+.btn.ghost:hover { background: var(--gray-soft); }
+.btn.on-dark { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.28); color: #fff; }
+.btn.sm { min-height: 36px; padding: 0 12px; font-size: 14px; border-radius: 10px; }
+.btn.lg { min-height: 52px; padding: 0 22px; font-size: 17px; border-radius: 14px; }
+.btn.ok-soft { background: var(--green-soft); border-color: transparent; color: var(--green-ink); }
+.btn.warn-soft { background: var(--red-soft); border-color: transparent; color: var(--red); }
+.icon-btn {
+  display: inline-grid; place-items: center; width: 40px; height: 40px;
+  border: 0; border-radius: 10px; background: transparent; color: var(--ink-2); cursor: pointer;
+}
+.icon-btn:hover { background: var(--gray-soft); }
+.spin { width: 18px; height: 18px; border: 2px solid currentColor; border-top-color: transparent; border-radius: 50%; animation: spin .7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ---------- structure ---------- */
+.shell { min-height: 100vh; }
+.side {
+  position: fixed; inset-block: 0; inset-inline-start: 0; width: var(--side);
+  display: flex; flex-direction: column; gap: 4px;
+  padding: calc(22px + env(safe-area-inset-top, 0px)) 14px 22px; background: var(--card); border-inline-end: 1px solid var(--line);
+  z-index: 20;
+}
+.brand { display: flex; align-items: center; gap: 10px; padding: 0 8px 18px; }
+.brand-mark { width: 40px; height: 40px; border-radius: 12px; background: var(--green); display: grid; place-items: center; color: #fff; flex: none; }
+.brand-mark svg { width: 24px; height: 24px; }
+.brand-text b { display: block; font-size: 16px; line-height: 1.2; }
+.brand-text span { font-size: 12px; color: var(--muted); }
+.nav a {
+  display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 0 12px;
+  border-radius: 12px; color: var(--ink-2); text-decoration: none; font-weight: 500;
+}
+.nav a:hover { background: var(--gray-soft); }
+.nav a[aria-current="page"] { background: var(--green-soft); color: var(--green-ink); }
+.side-foot { margin-top: auto; display: grid; gap: 8px; padding: 8px; font-size: 13px; color: var(--muted); }
+.mode-badge { display: inline-flex; align-items: center; gap: 6px; }
+.mode-badge::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
+.mode-badge.demo::before { background: var(--gold); }
+
+.content { margin-inline-start: var(--side); min-height: 100vh; display: flex; flex-direction: column; }
+.topbar {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  padding: calc(14px + env(safe-area-inset-top, 0px)) 28px 14px; background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line-2);
+}
+.topbar h1 { font-size: 22px; font-weight: 600; margin-inline-end: auto; }
+.topbar-actions { display: flex; gap: 8px; }
+main { padding: 24px 28px 48px; outline: none; display: grid; gap: 20px; align-content: start; max-width: 1280px; width: 100%; }
+.demo-strip {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  padding: 10px 28px; background: var(--gold-soft); color: var(--gold-ink); font-size: 14px;
+}
+.demo-strip .btn { margin-inline-start: auto; }
+.tabbar { display: none; }
+
+/* ---------- cartes / panneaux ---------- */
+.panel { background: var(--card); border: 1px solid var(--line-2); border-radius: var(--r-l); padding: 20px; box-shadow: var(--shadow); min-width: 0; }
+.panel-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.panel-head h2 { font-size: 17px; font-weight: 600; margin-inline-end: auto; }
+.count { min-width: 28px; height: 28px; padding: 0 8px; border-radius: 14px; background: var(--gray-soft); display: inline-grid; place-items: center; font-size: 14px; font-weight: 600; }
+.link { text-decoration: none; font-size: 14px; font-weight: 500; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.empty { padding: 22px 8px; text-align: center; color: var(--muted); display: grid; gap: 12px; justify-items: center; }
+
+/* ---------- accueil ---------- */
+.hero {
+  display: flex; align-items: flex-end; gap: 24px; flex-wrap: wrap;
+  padding: 26px 28px; border-radius: var(--r-l);
+  background: var(--green); color: #fff; position: relative; overflow: hidden;
+}
+.hero::after {
+  content: ''; position: absolute; inset-inline-end: -60px; top: -80px; width: 260px; height: 260px;
+  border-radius: 50%; border: 36px solid rgba(231, 169, 14, .16); pointer-events: none;
+}
+.hero-main { margin-inline-end: auto; position: relative; }
+.hero-date { font-size: 14px; opacity: .8; }
+.hero-label { font-size: 17px; margin-top: 10px; }
+.hero-value { font-size: 56px; font-weight: 300; line-height: 1.1; letter-spacing: -.5px; }
+.hero-value .cur { font-size: 20px; font-weight: 400; opacity: .85; }
+.hero-sub { margin-top: 6px; opacity: .9; }
+.hero-actions { display: flex; gap: 10px; flex-wrap: wrap; position: relative; }
+.kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.kpi { background: var(--card); border: 1px solid var(--line-2); border-radius: var(--r); padding: 16px 18px; }
+.kpi-label { font-size: 14px; color: var(--muted); }
+.kpi-value { font-size: 26px; font-weight: 500; margin-top: 4px; }
+.kpi-value small { font-size: 13px; font-weight: 400; color: var(--muted); }
+.kpi.neg .kpi-value { color: var(--red); }
+
+.mini-list { display: grid; }
+.mini {
+  display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; align-items: center;
+  padding: 12px 4px; border-top: 1px solid var(--line-2);
+}
+.mini:first-child { border-top: 0; }
+.mini-title { font-weight: 500; }
+.mini-sub { font-size: 14px; color: var(--muted); }
+.mini-actions { grid-row: span 2; display: flex; gap: 6px; }
+
+/* ---------- graphique ---------- */
+.chart { position: relative; }
+.chart svg { width: 100%; height: auto; display: block; overflow: visible; }
+.chart .grid line { stroke: var(--line-2); stroke-width: 1; }
+.chart .axis text { fill: var(--muted); font-size: 11px; font-family: var(--font); }
+.chart .bar { fill: var(--chart); }
+.chart .bar.today { fill: var(--gold); }
+.chart .hit { fill: transparent; cursor: pointer; }
+.chart .bar.on { opacity: .78; }
+.neg-text { color: var(--red); }
+.tip {
+  position: absolute; pointer-events: none; z-index: 5; transform: translate(-50%, -100%);
+  background: var(--ink); color: #fff; border-radius: 10px; padding: 8px 12px; font-size: 13px;
+  white-space: nowrap; direction: rtl; box-shadow: 0 6px 20px rgba(0,0,0,.18);
+}
+.tip b { font-weight: 600; }
+
+/* ---------- filtres ---------- */
+.filters { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip {
+  min-height: 38px; padding: 0 14px; border-radius: 19px; border: 1px solid var(--line);
+  background: var(--card); cursor: pointer; font-size: 14px; color: var(--ink-2);
+}
+.chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
+.field { display: grid; gap: 6px; min-width: 0; }
+.field > span { font-size: 14px; color: var(--ink-2); font-weight: 500; }
+.field small { color: var(--muted); font-size: 13px; }
+.input, select.input, textarea.input {
+  width: 100%; min-height: 46px; padding: 10px 14px;
+  border: 1px solid var(--line); border-radius: 12px; background: #fff;
+  font-size: 16px; /* évite le zoom iOS */
+}
+textarea.input { min-height: 84px; resize: vertical; }
+.input:focus { border-color: var(--green); outline: none; box-shadow: 0 0 0 3px var(--green-soft); }
+.input.compact { min-height: 40px; width: auto; padding: 6px 12px; }
+.search { position: relative; flex: 1 1 220px; max-width: 340px; }
+.search .input { padding-inline-start: 40px; min-height: 40px; }
+.search svg { position: absolute; inset-inline-start: 12px; top: 50%; transform: translateY(-50%); color: var(--muted); }
+.summary { display: flex; gap: 8px 22px; flex-wrap: wrap; font-size: 15px; color: var(--ink-2); }
+.summary b { color: var(--ink); font-weight: 600; }
+
+/* ---------- liste des commandes ---------- */
+.olist { display: grid; }
+.orow {
+  display: grid; align-items: center; gap: 4px 14px;
+  grid-template-columns: 100px minmax(0, 1.25fr) minmax(0, 1.1fr) 76px 64px 196px;
+  grid-template-areas: "ref route people price comm status" "ref route people price comm actions";
+  padding: 12px 10px; border-top: 1px solid var(--line-2); cursor: pointer;
+}
+.c-ref { grid-area: ref; } .c-route { grid-area: route; } .c-people { grid-area: people; }
+.c-price { grid-area: price; } .c-comm { grid-area: comm; } .c-status { grid-area: status; justify-self: end; }
+.c-actions { grid-area: actions; }
+.c-actions:empty { display: none; }
+.orow:hover { background: #FAFBFA; }
+.orow.head { cursor: default; font-size: 13px; color: var(--muted); border-top: 0; padding-block: 4px 8px; grid-template-areas: none; }
+.orow.head span:last-child { text-align: end; }
+.orow.head:hover { background: none; }
+.c-ref b { display: block; font-weight: 600; }
+.c-ref span, .c-people span { display: block; font-size: 14px; color: var(--muted); }
+.c-route { font-weight: 500; }
+.c-route .arrow { color: var(--muted); margin: 0 4px; }
+.c-people a { color: inherit; text-decoration: none; }
+.c-price, .c-comm { text-align: end; }
+.c-comm { color: var(--green-ink); font-weight: 500; }
+.c-actions { display: flex; gap: 6px; justify-content: flex-end; }
+.pill { display: inline-flex; align-items: center; gap: 6px; padding: 3px 12px; border-radius: 999px; font-size: 13px; font-weight: 500; }
+.pill::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.st-pending { background: var(--blue-soft); color: var(--blue); }
+.st-done { background: var(--green-soft); color: var(--green-ink); }
+.st-cancel { background: var(--gray-soft); color: var(--muted); }
+.st-cancel::before { background: var(--red); }
+.cell-label { display: none; }
+
+/* ---------- chauffeurs ---------- */
+.dlist { display: grid; }
+.drow {
+  display: grid; align-items: center; gap: 6px 18px;
+  grid-template-columns: minmax(170px, 1fr) minmax(220px, 1.3fr) minmax(170px, 1fr) auto;
+  padding: 14px 10px; border-top: 1px solid var(--line-2); cursor: pointer;
+}
+.drow:first-child { border-top: 0; }
+.drow:hover { background: #FAFBFA; }
+.drow.off { opacity: .6; }
+.d-id b { display: block; font-weight: 600; }
+.d-id span { font-size: 14px; color: var(--muted); }
+.d-bal { display: grid; gap: 6px; }
+.d-bal-line { display: flex; align-items: baseline; gap: 8px; }
+.d-bal-line b { font-size: 20px; font-weight: 500; }
+.meter { height: 8px; border-radius: 4px; background: var(--gray-soft); overflow: hidden; }
+.meter i { display: block; height: 100%; border-radius: 4px; background: var(--gold); }
+.meter.low i { background: #D97706; }
+.meter.neg i { background: var(--red); width: 100% !important; }
+.d-stats { font-size: 14px; color: var(--muted); display: flex; gap: 4px 14px; flex-wrap: wrap; }
+.d-actions { display: flex; gap: 6px; justify-content: flex-end; }
+.flag { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 500; padding: 2px 10px; border-radius: 999px; }
+.flag.low { background: #FEF0DC; color: #8A4B00; }
+.flag.neg { background: var(--red-soft); color: var(--red); }
+.flag.off { background: var(--gray-soft); color: var(--muted); }
+.flag svg { width: 14px; height: 14px; }
+
+/* ---------- tableaux ---------- */
+.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+table.t { width: 100%; border-collapse: collapse; font-size: 15px; }
+table.t th { text-align: start; font-weight: 500; font-size: 13px; color: var(--muted); padding: 8px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+table.t td { padding: 10px; border-bottom: 1px solid var(--line-2); }
+table.t td.n, table.t th.n { text-align: end; white-space: nowrap; }
+table.t tfoot td { font-weight: 600; border-top: 2px solid var(--line); border-bottom: 0; }
+table.t tr.zero td { color: var(--muted); }
+table.t tr.is-today td { background: var(--gold-soft); }
+
+/* ---------- relevé chauffeur ---------- */
+.toolbar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.toolbar .spacer { flex: 1; }
+.statement { display: grid; gap: 22px; }
+.st-head { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; padding-bottom: 16px; border-bottom: 2px solid var(--ink); }
+.st-head h2 { font-size: 24px; font-weight: 600; }
+.st-head dl { display: grid; grid-template-columns: auto auto; gap: 4px 16px; margin: 0; font-size: 15px; }
+.st-head dt { color: var(--muted); }
+.st-head dd { margin: 0; font-weight: 500; }
+.st-sum { max-width: 520px; }
+.st-sum td.n { font-size: 18px; }
+.st-sum tfoot td { font-size: 20px; }
+.st-sum tfoot td.n.neg { color: var(--red); }
+.st-section h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+.print-only { display: none; }
+
+/* ---------- formulaires / modales ---------- */
+.modal-wrap {
+  position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: 20px;
+  background: rgba(16, 26, 22, .42); animation: fade .15s ease-out;
+}
+.modal {
+  width: min(640px, 100%); max-height: calc(100vh - 40px); overflow: auto;
+  background: var(--card); border-radius: var(--r-l); box-shadow: 0 24px 60px rgba(0,0,0,.25);
+  animation: rise .18s ease-out;
+}
+.modal.wide { width: min(820px, 100%); }
+.modal-head { position: sticky; top: 0; background: var(--card); display: flex; align-items: center; gap: 10px; padding: 16px 20px; border-bottom: 1px solid var(--line-2); z-index: 1; }
+.modal-head h2 { font-size: 19px; font-weight: 600; margin-inline-end: auto; }
+.modal-body { padding: 20px; display: grid; gap: 16px; }
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; padding-top: 4px; }
+.modal-wrap.closing { opacity: 0; transition: opacity .15s; }
+@keyframes fade { from { opacity: 0; } }
+@keyframes rise { from { transform: translateY(12px); opacity: .6; } }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.form-grid .full { grid-column: 1 / -1; }
+.calc {
+  display: flex; flex-wrap: wrap; gap: 6px 22px; padding: 12px 16px; border-radius: 12px;
+  background: var(--green-soft); color: var(--green-ink); font-size: 15px;
+}
+.calc b { font-weight: 600; }
+.calc.warn { background: var(--red-soft); color: var(--red); }
+.seg { display: inline-flex; background: var(--gray-soft); border-radius: 12px; padding: 4px; gap: 4px; }
+.seg label { position: relative; }
+.seg input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+.seg span { display: inline-flex; align-items: center; min-height: 38px; padding: 0 16px; border-radius: 9px; font-size: 15px; cursor: pointer; }
+.seg input:checked + span { background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.12); font-weight: 500; }
+.seg input:focus-visible + span { outline: 3px solid var(--green-soft); }
+.inline-row { display: flex; gap: 8px; align-items: center; }
+.inline-row .input { flex: 1; }
+.voice-box { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding: 12px; border: 1px dashed var(--line); border-radius: 12px; }
+.voice-box audio { width: 100%; max-width: 340px; height: 40px; }
+.rec-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--red); animation: blink 1s infinite; }
+@keyframes blink { 50% { opacity: .2; } }
+.err { color: var(--red); font-size: 14px; }
+.confirm-text { font-size: 17px; line-height: 1.7; }
+
+/* ---------- écrans d'accès ---------- */
+.gate { min-height: 100vh; display: grid; place-items: center; padding: 24px; }
+.gate-card { width: min(560px, 100%); background: var(--card); border-radius: var(--r-l); padding: 32px; box-shadow: var(--shadow); display: grid; gap: 18px; }
+.gate-card h1 { font-size: 26px; font-weight: 600; }
+.gate-card .brand { padding: 0; }
+.steps { margin: 0; padding-inline-start: 22px; display: grid; gap: 8px; color: var(--ink-2); font-size: 15px; }
+.split { display: grid; gap: 12px; }
+.or { text-align: center; color: var(--muted); font-size: 14px; }
+.notice { padding: 12px 14px; border-radius: 12px; background: var(--gray-soft); font-size: 14px; color: var(--ink-2); }
+.notice.bad { background: var(--red-soft); color: var(--red); }
+.loading { display: grid; place-items: center; min-height: 40vh; color: var(--muted); gap: 10px; }
+
+/* ---------- notifications ---------- */
+#toasts { position: fixed; bottom: calc(20px + var(--safe-b)); inset-inline: 0; display: grid; justify-items: center; gap: 8px; z-index: 80; pointer-events: none; padding: 0 16px; }
+.toast { background: var(--ink); color: #fff; padding: 12px 18px; border-radius: 12px; font-size: 15px; box-shadow: 0 10px 30px rgba(0,0,0,.2); max-width: 560px; animation: rise .18s ease-out; transition: opacity .4s; }
+.toast-bad { background: var(--red); }
+.toast-warn { background: #8A4B00; }
+.toast.out { opacity: 0; }
+
+/* ---------- iPad portrait : rail d'icônes ---------- */
+@media (max-width: 1100px) {
+  :root { --side: 84px; }
+  .side { padding: 18px 10px; align-items: center; }
+  .brand { padding: 0 0 14px; }
+  .brand-text, .nav a span, .side-foot { display: none; }
+  .nav a { flex-direction: column; gap: 2px; justify-content: center; min-height: 60px; width: 64px; padding: 6px 0; font-size: 11px; }
+  .nav a span.short { display: block; }
+  .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .orow { grid-template-columns: 1fr auto; gap: 6px 12px; padding: 14px 8px;
+    grid-template-areas: "ref status" "route route" "people people" "price comm" "actions actions"; }
+  .orow.head { display: none; }
+  .c-people span { display: inline; margin-inline-end: 14px; }
+  .c-price, .c-comm { text-align: start; display: inline-flex; gap: 6px; }
+  .c-comm { justify-self: end; }
+  .cell-label { display: inline; color: var(--muted); font-size: 14px; }
+  .c-actions { justify-content: flex-start; }
+  .drow { grid-template-columns: 1fr 1fr; }
+  .d-stats { grid-column: 1; }
+  .d-actions { grid-column: 2; }
+}
+@media (min-width: 1101px) { .nav a span.short { display: none; } }
+
+/* ---------- téléphone : barre d'onglets ---------- */
+@media (max-width: 720px) {
+  .side { display: none; }
+  .content { margin-inline-start: 0; padding-bottom: calc(70px + var(--safe-b)); }
+  .topbar { padding: calc(12px + env(safe-area-inset-top, 0px)) 16px 12px; }
+  .topbar h1 { font-size: 19px; }
+  .topbar-actions .btn span { display: none; }
+  main { padding: 16px 14px 32px; gap: 16px; }
+  .demo-strip { padding: 10px 16px; }
+  .tabbar {
+    display: grid; grid-template-columns: repeat(6, 1fr); position: fixed; inset-inline: 0; bottom: 0; z-index: 30;
+    background: var(--card); border-top: 1px solid var(--line); padding-bottom: var(--safe-b);
+  }
+  .tabbar a { display: grid; justify-items: center; gap: 2px; padding: 8px 0 6px; font-size: 11px; color: var(--muted); text-decoration: none; }
+  .tabbar a[aria-current="page"] { color: var(--green); }
+  .hero { padding: 20px; }
+  .hero-value { font-size: 44px; }
+  .grid-2, .form-grid { grid-template-columns: 1fr; }
+  .drow { grid-template-columns: 1fr; }
+  .d-stats, .d-actions { grid-column: 1; justify-content: flex-start; }
+  .panel { padding: 16px; border-radius: var(--r); }
+  .modal-wrap { padding: 0; align-items: end; }
+  .modal { border-radius: var(--r-l) var(--r-l) 0 0; max-height: 92vh; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* ---------- impression ---------- */
+@media print {
+  @page { size: A4; margin: 14mm; }
+  body { background: #fff; font-size: 12pt; }
+  .side, .tabbar, .topbar, .demo-strip, #toasts, .no-print, .toolbar, .modal-wrap { display: none !important; }
+  .content { margin: 0 !important; padding: 0 !important; }
+  main { padding: 0; max-width: none; }
+  .panel { box-shadow: none; border: 0; padding: 0; }
+  .print-only { display: block; }
+  .hero { background: #fff; color: var(--ink); border: 1px solid var(--line); }
+  .hero::after { display: none; }
+  table.t tr { break-inside: avoid; }
+  a { color: inherit; text-decoration: none; }
+}
+
+</style>
+</head>
+<body>
+<div id="root"></div>
+<div id="toasts" aria-live="polite"></div>
+<script>
+const SETUP_SQL = "-- =====================================================================\n--  Delivery Manager — base de données Supabase\n--  À exécuter UNE fois : Supabase → SQL Editor → New query → coller → Run\n--  Le script peut être relancé sans risque (il ne supprime aucune donnée).\n-- =====================================================================\n\n-- ---------------------------------------------------------------------\n-- 1. Paramètres (une seule ligne)\n-- ---------------------------------------------------------------------\ncreate table if not exists public.settings (\n  id               smallint      primary key default 1 check (id = 1),\n  business_name    text          not null default 'Delivery Manager',\n  commission_rate  numeric(6,4)  not null default 0.15 check (commission_rate >= 0 and commission_rate <= 1),\n  low_balance      numeric(14,2) not null default 1000 check (low_balance >= 0),\n  currency         text          not null default 'أوقية',\n  updated_at       timestamptz   not null default now()\n);\ninsert into public.settings (id) values (1) on conflict (id) do nothing;\n\n-- ---------------------------------------------------------------------\n-- 2. Chauffeurs\n-- ---------------------------------------------------------------------\ncreate table if not exists public.drivers (\n  id          uuid        primary key default gen_random_uuid(),\n  phone       text        not null unique check (length(btrim(phone)) > 0),\n  name        text,\n  active      boolean     not null default true,\n  notes       text,\n  created_at  timestamptz not null default now()\n);\n\n-- ---------------------------------------------------------------------\n-- 3. Recharges du solde des chauffeurs\n-- ---------------------------------------------------------------------\ncreate table if not exists public.topups (\n  id          uuid          primary key default gen_random_uuid(),\n  driver_id   uuid          not null references public.drivers(id) on delete restrict,\n  amount      numeric(14,2) not null check (amount > 0),\n  method      text,\n  notes       text,\n  topup_at    timestamptz   not null default now(),\n  created_at  timestamptz   not null default now()\n);\ncreate index if not exists topups_driver_idx on public.topups (driver_id);\ncreate index if not exists topups_at_idx     on public.topups (topup_at);\n\n-- ---------------------------------------------------------------------\n-- 4. Commandes de livraison\n--    - commission_rate est figé à la création (copié depuis settings) :\n--      changer le taux plus tard ne modifie pas les anciennes commandes.\n--    - commission n'est due que si la commande est « completed ».\n-- ---------------------------------------------------------------------\ncreate sequence if not exists public.order_ref_seq;\n\ncreate table if not exists public.orders (\n  id               uuid          primary key default gen_random_uuid(),\n  ref              text          not null unique\n                                 default ('T-' || lpad(nextval('public.order_ref_seq')::text, 5, '0')),\n  ordered_at       timestamptz   not null default now(),\n  customer_phone   text          not null,\n  driver_id        uuid          not null references public.drivers(id) on delete restrict,\n  pickup           text          not null,\n  dropoff          text          not null,\n  price            numeric(14,2) not null check (price >= 0),\n  commission_rate  numeric(6,4)  not null check (commission_rate >= 0 and commission_rate <= 1),\n  status           text          not null default 'pending'\n                                 check (status in ('pending', 'completed', 'cancelled')),\n  commission       numeric(14,2) generated always as (\n                     case when status = 'completed' then round(price * commission_rate, 2) else 0 end\n                   ) stored,\n  completed_at     timestamptz,\n  voice_path       text,\n  notes            text,\n  created_at       timestamptz   not null default now()\n);\ncreate index if not exists orders_driver_idx on public.orders (driver_id);\ncreate index if not exists orders_at_idx     on public.orders (ordered_at);\ncreate index if not exists orders_status_idx on public.orders (status);\n\ncreate or replace function public.orders_before_write()\nreturns trigger\nlanguage plpgsql\nset search_path = public\nas $$\nbegin\n  if tg_op = 'INSERT' and new.commission_rate is null then\n    select s.commission_rate into new.commission_rate from public.settings s where s.id = 1;\n  end if;\n\n  if new.status = 'completed' then\n    if tg_op = 'INSERT' or old.status is distinct from 'completed' then\n      new.completed_at := coalesce(new.completed_at, now());\n    end if;\n  else\n    new.completed_at := null;\n  end if;\n\n  return new;\nend;\n$$;\n\ndrop trigger if exists orders_before_write on public.orders;\ncreate trigger orders_before_write\n  before insert or update on public.orders\n  for each row execute function public.orders_before_write();\n\n-- ---------------------------------------------------------------------\n-- 5. Soldes des chauffeurs : solde = recharges − commissions des commandes terminées\n-- ---------------------------------------------------------------------\ncreate or replace view public.driver_balances\nwith (security_invoker = true) as\nselect\n  d.id,\n  d.phone,\n  d.name,\n  d.active,\n  d.notes,\n  d.created_at,\n  coalesce(t.total_topups, 0)::numeric(14,2)                               as total_topups,\n  coalesce(o.total_commission, 0)::numeric(14,2)                           as total_commission,\n  coalesce(o.completed_orders, 0)::int                                     as completed_orders,\n  coalesce(o.pending_orders, 0)::int                                       as pending_orders,\n  (coalesce(t.total_topups, 0) - coalesce(o.total_commission, 0))::numeric(14,2) as balance,\n  t.last_topup_at\nfrom public.drivers d\nleft join (\n  select driver_id, sum(amount) as total_topups, max(topup_at) as last_topup_at\n  from public.topups\n  group by driver_id\n) t on t.driver_id = d.id\nleft join (\n  select driver_id,\n         sum(commission)                                as total_commission,\n         count(*) filter (where status = 'completed')   as completed_orders,\n         count(*) filter (where status = 'pending')     as pending_orders\n  from public.orders\n  group by driver_id\n) o on o.driver_id = d.id;\n\n-- ---------------------------------------------------------------------\n-- 6. Statistiques et rapports (heure de Nouakchott)\n-- ---------------------------------------------------------------------\ncreate or replace function public.dashboard_stats(p_day date)\nreturns json\nlanguage sql\nstable\nsecurity invoker\nset search_path = public\nas $$\n  with o as (\n    select (ordered_at at time zone 'Africa/Nouakchott')::date as d, status, price, commission\n    from public.orders\n  ),\n  t as (\n    select (topup_at at time zone 'Africa/Nouakchott')::date as d, amount\n    from public.topups\n  ),\n  m as (\n    select date_trunc('month', p_day::timestamp)::date                        as m0,\n           (date_trunc('month', p_day::timestamp) + interval '1 month')::date as m1\n  )\n  select json_build_object(\n    'day',              p_day,\n    'today_commission', coalesce((select sum(commission) from o where d = p_day), 0),\n    'today_value',      coalesce((select sum(price) from o where d = p_day and status = 'completed'), 0),\n    'today_completed',  (select count(*) from o where d = p_day and status = 'completed'),\n    'today_pending',    (select count(*) from o where d = p_day and status = 'pending'),\n    'today_cancelled',  (select count(*) from o where d = p_day and status = 'cancelled'),\n    'month_commission', coalesce((select sum(commission) from o, m where d >= m.m0 and d < m.m1), 0),\n    'total_commission', coalesce((select sum(commission) from o), 0),\n    'today_topups',     coalesce((select sum(amount) from t where d = p_day), 0),\n    'total_balance',    coalesce((select sum(balance) from public.driver_balances), 0),\n    'pending_total',    (select count(*) from o where status = 'pending')\n  );\n$$;\n\ncreate or replace function public.daily_report(p_month date)\nreturns table (day date, completed_orders int, orders_value numeric, commission numeric, topups numeric)\nlanguage sql\nstable\nsecurity invoker\nset search_path = public\nas $$\n  with b as (\n    select date_trunc('month', p_month::timestamp)::date                        as m0,\n           (date_trunc('month', p_month::timestamp) + interval '1 month')::date as m1\n  ),\n  days as (\n    select generate_series(b.m0, b.m1 - 1, interval '1 day')::date as day from b\n  ),\n  o as (\n    select (x.ordered_at at time zone 'Africa/Nouakchott')::date        as d,\n           count(*) filter (where x.status = 'completed')               as n,\n           coalesce(sum(x.price) filter (where x.status = 'completed'), 0) as v,\n           coalesce(sum(x.commission), 0)                               as c\n    from public.orders x, b\n    where x.ordered_at >= b.m0::timestamp - interval '1 day'\n      and x.ordered_at <  b.m1::timestamp + interval '1 day'\n    group by 1\n  ),\n  t as (\n    select (y.topup_at at time zone 'Africa/Nouakchott')::date as d, sum(y.amount) as s\n    from public.topups y, b\n    where y.topup_at >= b.m0::timestamp - interval '1 day'\n      and y.topup_at <  b.m1::timestamp + interval '1 day'\n    group by 1\n  )\n  select days.day,\n         coalesce(o.n, 0)::int,\n         coalesce(o.v, 0)::numeric,\n         coalesce(o.c, 0)::numeric,\n         coalesce(t.s, 0)::numeric\n  from days\n  left join o on o.d = days.day\n  left join t on t.d = days.day\n  order by days.day;\n$$;\n\ncreate or replace function public.monthly_report(p_year int)\nreturns table (month int, completed_orders int, orders_value numeric, commission numeric, topups numeric)\nlanguage sql\nstable\nsecurity invoker\nset search_path = public\nas $$\n  with months as (\n    select generate_series(1, 12) as month\n  ),\n  o as (\n    select extract(month from x.ordered_at at time zone 'Africa/Nouakchott')::int as m,\n           count(*) filter (where x.status = 'completed')                         as n,\n           coalesce(sum(x.price) filter (where x.status = 'completed'), 0)        as v,\n           coalesce(sum(x.commission), 0)                                         as c\n    from public.orders x\n    where extract(year from x.ordered_at at time zone 'Africa/Nouakchott')::int = p_year\n    group by 1\n  ),\n  t as (\n    select extract(month from y.topup_at at time zone 'Africa/Nouakchott')::int as m,\n           sum(y.amount) as s\n    from public.topups y\n    where extract(year from y.topup_at at time zone 'Africa/Nouakchott')::int = p_year\n    group by 1\n  )\n  select months.month,\n         coalesce(o.n, 0)::int,\n         coalesce(o.v, 0)::numeric,\n         coalesce(o.c, 0)::numeric,\n         coalesce(t.s, 0)::numeric\n  from months\n  left join o on o.m = months.month\n  left join t on t.m = months.month\n  order by months.month;\n$$;\n\n-- ---------------------------------------------------------------------\n-- 7. Sécurité\n--    Seuls les comptes listés dans app_users ont accès aux données.\n--    Le PREMIER compte créé dans Authentication → Users y est ajouté\n--    automatiquement (le gérant). Tout compte créé ensuite n'a accès à rien.\n-- ---------------------------------------------------------------------\ncreate table if not exists public.app_users (\n  user_id     uuid        primary key,\n  email       text,\n  created_at  timestamptz not null default now()\n);\nalter table public.app_users enable row level security;   -- aucune politique : invisible via l'API\n\ncreate or replace function public.is_app_user()\nreturns boolean\nlanguage sql\nstable\nsecurity definer\nset search_path = public\nas $$\n  select exists (select 1 from public.app_users where user_id = auth.uid());\n$$;\n\ncreate or replace function public.claim_first_user()\nreturns trigger\nlanguage plpgsql\nsecurity definer\nset search_path = public\nas $$\nbegin\n  if not exists (select 1 from public.app_users) then\n    insert into public.app_users (user_id, email) values (new.id, new.email);\n  end if;\n  return new;\nend;\n$$;\n\ndrop trigger if exists dm_claim_first_user on auth.users;\ncreate trigger dm_claim_first_user\n  after insert on auth.users\n  for each row execute function public.claim_first_user();\n\n-- si le compte du gérant existait déjà avant ce script\ninsert into public.app_users (user_id, email)\nselect u.id, u.email from auth.users u\nwhere not exists (select 1 from public.app_users)\norder by u.created_at\nlimit 1;\n\nalter table public.settings enable row level security;\nalter table public.drivers  enable row level security;\nalter table public.topups   enable row level security;\nalter table public.orders   enable row level security;\n\ndrop policy if exists \"settings_read\"   on public.settings;\ndrop policy if exists \"settings_update\" on public.settings;\ncreate policy \"settings_read\"   on public.settings for select to authenticated using (public.is_app_user());\ncreate policy \"settings_update\" on public.settings for update to authenticated using (public.is_app_user()) with check (id = 1 and public.is_app_user());\n\ndrop policy if exists \"drivers_all\" on public.drivers;\ncreate policy \"drivers_all\" on public.drivers for all to authenticated using (public.is_app_user()) with check (public.is_app_user());\n\ndrop policy if exists \"topups_all\" on public.topups;\ncreate policy \"topups_all\" on public.topups for all to authenticated using (public.is_app_user()) with check (public.is_app_user());\n\ndrop policy if exists \"orders_all\" on public.orders;\ncreate policy \"orders_all\" on public.orders for all to authenticated using (public.is_app_user()) with check (public.is_app_user());\n\nrevoke all on public.settings, public.drivers, public.topups, public.orders, public.driver_balances, public.app_users from anon;\nrevoke all on public.app_users from authenticated;\ngrant select, update                 on public.settings        to authenticated;\ngrant select, insert, update, delete on public.drivers         to authenticated;\ngrant select, insert, update, delete on public.topups          to authenticated;\ngrant select, insert, update, delete on public.orders          to authenticated;\ngrant select                         on public.driver_balances to authenticated;\ngrant usage, select on sequence public.order_ref_seq           to authenticated;\n\nrevoke execute on function public.dashboard_stats(date) from public, anon;\nrevoke execute on function public.daily_report(date)    from public, anon;\nrevoke execute on function public.monthly_report(int)   from public, anon;\ngrant  execute on function public.dashboard_stats(date) to authenticated;\ngrant  execute on function public.daily_report(date)    to authenticated;\ngrant  execute on function public.monthly_report(int)   to authenticated;\nrevoke execute on function public.is_app_user()       from public, anon;\ngrant  execute on function public.is_app_user()       to authenticated;\nrevoke execute on function public.claim_first_user()  from public, anon, authenticated;\n\n-- ---------------------------------------------------------------------\n-- 8. Stockage des messages vocaux (privé)\n-- ---------------------------------------------------------------------\ninsert into storage.buckets (id, name, public, file_size_limit)\nvalues ('voice', 'voice', false, 15728640)\non conflict (id) do nothing;\n\ndrop policy if exists \"voice_read\"   on storage.objects;\ndrop policy if exists \"voice_insert\" on storage.objects;\ndrop policy if exists \"voice_update\" on storage.objects;\ndrop policy if exists \"voice_delete\" on storage.objects;\ncreate policy \"voice_read\"   on storage.objects for select to authenticated using (bucket_id = 'voice' and public.is_app_user());\ncreate policy \"voice_insert\" on storage.objects for insert to authenticated with check (bucket_id = 'voice' and public.is_app_user());\ncreate policy \"voice_update\" on storage.objects for update to authenticated using (bucket_id = 'voice' and public.is_app_user()) with check (bucket_id = 'voice' and public.is_app_user());\ncreate policy \"voice_delete\" on storage.objects for delete to authenticated using (bucket_id = 'voice' and public.is_app_user());\n\n-- Fin. Ensuite : Authentication → Users → Add user (le compte du gérant, « Auto Confirm »).\n-- Pour donner accès à un 2e compte plus tard :\n--   insert into public.app_users (user_id, email)\n--   select id, email from auth.users where email = 'adresse@exemple.com';\n";
+'use strict';
+/* =====================================================================
+   Delivery Manager — نظام إدارة معاملات التوصيل وأرصدة السائقين
+   ---------------------------------------------------------------------
+   CONFIGURATION (facultatif) : collez ici l'URL et la clé « anon » de
+   votre projet Supabase (Project Settings → API). Si vous les laissez
+   vides, l'application les demande au premier lancement sur l'iPad.
+   ===================================================================== */
+const CONFIG = {
+  SUPABASE_URL: 'https://kykjdsaxyzrekesdhwac.supabase.co',
+  SUPABASE_ANON_KEY: 'sb_publishable_-TuFb_00QHkjIvnfCvHGKg_9lGgbCjB',
+};
+const APP_VERSION = '1.0.0';
+const DEMO_BUILD = false; // true uniquement pour la version de démonstration
+const SUPABASE_JS = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js';
+
+/* ---------- stockage local (protégé) ---------- */
+const memStore = {};
+const local = {
+  get(k, d = null) {
+    try { const v = localStorage.getItem(k); if (v != null) return JSON.parse(v); } catch (e) { /* ignoré */ }
+    return k in memStore ? memStore[k] : d;
+  },
+  set(k, v) { memStore[k] = v; try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* ignoré */ } },
+  del(k) { delete memStore[k]; try { localStorage.removeItem(k); } catch (e) { /* ignoré */ } },
+};
+
+/* ---------- utilitaires ---------- */
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const num = (v) => { const n = Number(v); return Number.isFinite(n) ? n : 0; };
+const round2 = (v) => Math.round(num(v) * 100) / 100;
+const NF = new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 });
+const money = (v) => { const n = round2(v); return n < 0 ? '\u2066' + NF.format(n) + '\u2069' : NF.format(n); };
+const pad = (n) => String(n).padStart(2, '0');
+const ymd = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const parseYmd = (s) => { const [y, m, d] = String(s).slice(0, 10).split('-').map(Number); return new Date(y, m - 1, d); };
+const today = () => ymd(new Date());
+const addDays = (s, n) => { const d = parseYmd(s); d.setDate(d.getDate() + n); return ymd(d); };
+const monthStart = (s) => String(s).slice(0, 7) + '-01';
+const nextMonth = (s) => { const d = parseYmd(monthStart(s)); d.setMonth(d.getMonth() + 1); return ymd(d); };
+const localDay = (iso) => ymd(new Date(iso));
+const dayStartISO = (s) => parseYmd(s).toISOString();
+const fmtDate = (v) => {
+  const d = v instanceof Date ? v : (String(v).length === 10 ? parseYmd(v) : new Date(v));
+  return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()}`;
+};
+const fmtShort = (v) => { const d = new Date(v); return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}`; };
+const fmtTime = (v) => { const d = new Date(v); return `${pad(d.getHours())}:${pad(d.getMinutes())}`; };
+const WEEKDAYS = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+const MONTHS = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+const monthName = (s) => `${MONTHS[parseYmd(monthStart(s)).getMonth()]} ${String(s).slice(0, 4)}`;
+const uid = () => (window.crypto && crypto.randomUUID ? crypto.randomUUID()
+  : 'id-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10));
+const pick = (o, keys) => Object.fromEntries(keys.filter((k) => o[k] !== undefined).map((k) => [k, o[k]]));
+const cleanPhone = (v) => String(v || '').replace(/[^\d+]/g, '');
+const debounce = (fn, ms = 250) => { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; };
+
+const STATUS = {
+  pending: { label: 'قيد التنفيذ', cls: 'st-pending' },
+  completed: { label: 'مكتمل', cls: 'st-done' },
+  cancelled: { label: 'ملغى', cls: 'st-cancel' },
+};
+const METHODS = ['نقداً', 'Bankily', 'Masrvi', 'Sedad', 'تحويل آخر'];
+
+/* ---------- icônes ---------- */
+const ICONS = {
+  home: '<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/>',
+  box: '<path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 7v10l9 4 9-4V7"/><path d="M12 11v10"/>',
+  users: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="M16 4.5a3.5 3.5 0 010 7"/><path d="M18.5 14.8c1.6.8 2.6 2.5 3 5.2"/>',
+  wallet: '<rect x="3" y="6" width="18" height="14" rx="2.5"/><path d="M3 10h18"/><path d="M16 15h2"/><path d="M6 6l9-3 2 3"/>',
+  chart: '<path d="M5 20V11"/><path d="M11 20V5"/><path d="M17 20v-6"/><path d="M3 20h18"/>',
+  sliders: '<path d="M4 6h9"/><path d="M19 6h1"/><circle cx="16" cy="6" r="2.2"/><path d="M4 12h3"/><path d="M13 12h7"/><circle cx="10" cy="12" r="2.2"/><path d="M4 18h11"/><circle cx="18" cy="18" r="2.2"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+  x: '<path d="M6 6l12 12M18 6L6 18"/>',
+  mic: '<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0014 0"/><path d="M12 18v3"/>',
+  clip: '<path d="M20.5 11.5l-8.2 8.2a5 5 0 01-7.1-7.1l8.6-8.6a3.4 3.4 0 014.8 4.8l-8.4 8.4a1.7 1.7 0 01-2.4-2.4l7.6-7.6"/>',
+  play: '<path d="M8 5.5v13l10.5-6.5z"/>',
+  stop: '<rect x="7" y="7" width="10" height="10" rx="1.5"/>',
+  print: '<path d="M7 9V3h10v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M7 14h10v7H7z"/>',
+  download: '<path d="M12 4v11"/><path d="M7 10l5 5 5-5"/><path d="M4 20h16"/>',
+  search: '<circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/>',
+  logout: '<path d="M15 4h3a2 2 0 012 2v12a2 2 0 01-2 2h-3"/><path d="M10 8l-4 4 4 4"/><path d="M6 12h10"/>',
+  trash: '<path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 13h10l1-13"/>',
+  edit: '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/>',
+  back: '<path d="M9 6l6 6-6 6"/>',
+  alert: '<path d="M12 4l9 16H3z"/><path d="M12 10v4"/><path d="M12 17v.5"/>',
+  copy: '<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 00-1-1H5a1 1 0 00-1 1v10a1 1 0 001 1h3"/>',
+  truck: '<path d="M3 16V7h10v9"/><path d="M13 10h4l3 3v3h-7"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/>',
+  pause: '<path d="M9 6v12M15 6v12"/>',
+};
+const ic = (n) => `<svg class="i" viewBox="0 0 24 24" aria-hidden="true">${ICONS[n] || ''}</svg>`;
+
+/* ---------- interface : notifications et fenêtres ---------- */
+function toast(msg, kind = 'ok') {
+  const el = document.createElement('div');
+  el.className = `toast toast-${kind}`;
+  el.setAttribute('role', 'status');
+  el.textContent = msg;
+  $('#toasts').append(el);
+  setTimeout(() => el.classList.add('out'), kind === 'bad' ? 5200 : 3200);
+  setTimeout(() => el.remove(), kind === 'bad' ? 5700 : 3700);
+}
+
+function showModal({ title, html, wide = false, onMount }) {
+  return new Promise((resolve) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'modal-wrap';
+    wrap.innerHTML = `<div class="modal ${wide ? 'wide' : ''}" role="dialog" aria-modal="true" aria-label="${esc(title)}">
+      <header class="modal-head"><h2>${esc(title)}</h2><button type="button" class="icon-btn" data-close aria-label="إغلاق">${ic('x')}</button></header>
+      <div class="modal-body">${html}</div></div>`;
+    const prevFocus = document.activeElement;
+    let done = false;
+    const close = (val = null) => {
+      if (done) return; done = true;
+      document.removeEventListener('keydown', onKey);
+      wrap.classList.add('closing');
+      setTimeout(() => wrap.remove(), 150);
+      if (prevFocus && prevFocus.focus) try { prevFocus.focus({ preventScroll: true }); } catch (e) { /* ignoré */ }
+      resolve(val);
+    };
+    const onKey = (e) => { if (e.key === 'Escape' && wrap === $$('.modal-wrap').pop()) close(null); };
+    document.addEventListener('keydown', onKey);
+    wrap.addEventListener('click', (e) => {
+      if (e.target === wrap || e.target.closest('[data-close]')) close(null);
+    });
+    document.body.append(wrap);
+    const modal = $('.modal', wrap);
+    onMount && onMount(modal, close);
+    const first = $('input:not([type=hidden]):not([type=radio]), select, textarea', modal);
+    if (first && !('ontouchstart' in window)) first.focus();
+  });
+}
+
+function confirmBox(text, { ok = 'تأكيد', danger = false, title = 'تأكيد' } = {}) {
+  return showModal({
+    title,
+    html: `<p class="confirm-text">${esc(text)}</p>
+      <div class="modal-actions"><button type="button" class="btn ghost" data-close>رجوع</button>
+      <button type="button" class="btn ${danger ? 'danger' : 'primary'}" data-ok>${esc(ok)}</button></div>`,
+    onMount: (m, close) => { $('[data-ok]', m).onclick = () => close(true); },
+  }).then((v) => v === true);
+}
+
+function busy(btn, on, label) {
+  if (!btn) return;
+  if (on) { btn.dataset.label = btn.innerHTML; btn.disabled = true; btn.innerHTML = `<span class="spin"></span>${label ? ' ' + esc(label) : ''}`; }
+  else { btn.disabled = false; if (btn.dataset.label) btn.innerHTML = btn.dataset.label; }
+}
+
+function errMsg(e) {
+  const code = String((e && e.code) || '');
+  const m = String((e && (e.message || e.error_description)) || e || '').toLowerCase();
+  if (code === '23505' || m.includes('duplicate')) return 'هذا الرقم مسجل مسبقاً.';
+  if (code === 'PGRST116') return 'العنصر غير موجود أو لا تملك صلاحية الوصول إليه.';
+  if (code === '23503' || m.includes('foreign key') || m.includes('violates restrict'))
+    return 'لا يمكن الحذف لأن لهذا السائق طلبات أو شحنات مسجلة. يمكنك إيقافه بدلاً من ذلك.';
+  if (m.includes('invalid login') || m.includes('invalid credentials')) return 'البريد الإلكتروني أو كلمة المرور غير صحيحة.';
+  if (m.includes('email not confirmed')) return 'البريد الإلكتروني غير مؤكد. فعّل خيار Auto Confirm عند إنشاء المستخدم في Supabase.';
+  if (m.includes('failed to fetch') || m.includes('networkerror') || m.includes('load failed') || m.includes('network request failed'))
+    return 'تعذر الاتصال بالخادم. تحقق من الإنترنت ثم أعد المحاولة.';
+  if (m.includes('jwt') || code === 'PGRST301') return 'انتهت الجلسة. سجّل الدخول من جديد.';
+  if (code === '42P01' || code === '42883' || code === 'PGRST202' || code === 'PGRST205' || m.includes('does not exist') || m.includes('could not find'))
+    return 'قاعدة البيانات غير مهيأة بعد. انسخ كود الإعداد وشغّله في Supabase (SQL Editor).';
+  if (code === '42501' || m.includes('permission denied') || m.includes('row-level security'))
+    return 'ليست لديك صلاحية لهذه العملية. سجّل الدخول بحساب المسير.';
+  if (m.includes('bucket not found')) return 'مساحة حفظ الرسائل الصوتية غير موجودة. أعد تشغيل كود الإعداد في Supabase.';
+  if (m.includes('payload too large') || m.includes('exceeded the maximum')) return 'الملف الصوتي كبير جداً (الحد 15 ميغابايت).';
+  return 'حدث خطأ: ' + ((e && e.message) || e);
+}
+
+function downloadCSV(filename, rows) {
+  if (DEMO_BUILD) { toast('التصدير متاح في النسخة الكاملة من التطبيق.', 'warn'); return; }
+  const cell = (v) => { const s = String(v ?? ''); return /[",\n;]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+  const csv = '﻿' + rows.map((r) => r.map(cell).join(',')).join('\r\n');
+  try {
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    document.body.append(a);
+    a.click();
+    setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+    toast('تم تجهيز ملف ' + filename);
+  } catch (e) {
+    toast('التنزيل غير متاح على هذا الجهاز.', 'warn');
+  }
+}
+
+function printPage() {
+  if (DEMO_BUILD) { toast('الطباعة متاحة في النسخة الكاملة من التطبيق.', 'warn'); return; }
+  try { window.print(); } catch (e) { toast('الطباعة غير متاحة هنا.', 'warn'); }
+}
+
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = src; s.async = true;
+    s.onload = resolve;
+    s.onerror = () => reject(new Error('failed to fetch ' + src));
+    document.head.append(s);
+  });
+}
+
+/* =====================================================================
+   COUCHE DE DONNÉES
+   Les deux implémentations exposent exactement les mêmes méthodes.
+   ===================================================================== */
+const ORDER_SELECT = '*, driver:drivers(id, phone, name)';
+const ORDER_FIELDS = ['ordered_at', 'customer_phone', 'driver_id', 'pickup', 'dropoff', 'price', 'status', 'voice_path', 'notes'];
+
+class CloudAPI {
+  constructor(url, key) {
+    this.mode = 'cloud';
+    this.url = url;
+    this.sb = window.supabase.createClient(url, key, {
+      auth: { persistSession: true, autoRefreshToken: true, storageKey: 'dm.auth' },
+    });
+  }
+  async run(p) { const { data, error } = await p; if (error) throw error; return data; }
+  async session() { const { data, error } = await this.sb.auth.getSession(); if (error) throw error; return data.session; }
+  async signIn(email, password) { const { error } = await this.sb.auth.signInWithPassword({ email, password }); if (error) throw error; }
+  async signOut() { await this.sb.auth.signOut(); }
+  onAuthLost(cb) { this.sb.auth.onAuthStateChange((ev, s) => { if (ev === 'SIGNED_OUT' || (!s && ev !== 'INITIAL_SESSION')) cb(); }); }
+
+  getSettings() { return this.run(this.sb.from('settings').select('*').eq('id', 1).single()); }
+  saveSettings(p) {
+    return this.run(this.sb.from('settings').update({ ...p, updated_at: new Date().toISOString() }).eq('id', 1).select().single());
+  }
+
+  listDrivers() { return this.run(this.sb.from('driver_balances').select('*').order('created_at', { ascending: true })); }
+  getDriver(id) { return this.run(this.sb.from('driver_balances').select('*').eq('id', id).single()); }
+  saveDriver(d) {
+    const row = { phone: cleanPhone(d.phone), name: d.name || null, notes: d.notes || null, active: d.active !== false };
+    return d.id ? this.run(this.sb.from('drivers').update(row).eq('id', d.id).select().single())
+      : this.run(this.sb.from('drivers').insert(row).select().single());
+  }
+  deleteDriver(id) { return this.run(this.sb.from('drivers').delete().eq('id', id)); }
+
+  listOrders({ from, to, status, driverId, limit = 2000 } = {}) {
+    let q = this.sb.from('orders').select(ORDER_SELECT).order('ordered_at', { ascending: false }).limit(limit);
+    if (from) q = q.gte('ordered_at', dayStartISO(from));
+    if (to) q = q.lt('ordered_at', dayStartISO(addDays(to, 1)));
+    if (status) q = q.eq('status', status);
+    if (driverId) q = q.eq('driver_id', driverId);
+    return this.run(q);
+  }
+  saveOrder(o) {
+    const row = pick(o, ORDER_FIELDS);
+    return o.id ? this.run(this.sb.from('orders').update(row).eq('id', o.id).select(ORDER_SELECT).single())
+      : this.run(this.sb.from('orders').insert(row).select(ORDER_SELECT).single());
+  }
+  setOrderStatus(id, status) { return this.saveOrder({ id, status }); }
+  deleteOrder(id) { return this.run(this.sb.from('orders').delete().eq('id', id)); }
+
+  listTopups({ from, to, driverId, limit = 2000 } = {}) {
+    let q = this.sb.from('topups').select('*, driver:drivers(id, phone, name)').order('topup_at', { ascending: false }).limit(limit);
+    if (from) q = q.gte('topup_at', dayStartISO(from));
+    if (to) q = q.lt('topup_at', dayStartISO(addDays(to, 1)));
+    if (driverId) q = q.eq('driver_id', driverId);
+    return this.run(q);
+  }
+  saveTopup(t) {
+    const row = pick(t, ['driver_id', 'amount', 'method', 'notes', 'topup_at']);
+    return t.id ? this.run(this.sb.from('topups').update(row).eq('id', t.id).select().single())
+      : this.run(this.sb.from('topups').insert(row).select().single());
+  }
+  deleteTopup(id) { return this.run(this.sb.from('topups').delete().eq('id', id)); }
+
+  stats(day) { return this.run(this.sb.rpc('dashboard_stats', { p_day: day })); }
+  daily(month) { return this.run(this.sb.rpc('daily_report', { p_month: monthStart(month) })); }
+  monthly(year) { return this.run(this.sb.rpc('monthly_report', { p_year: Number(year) })); }
+
+  async uploadVoice(file) {
+    const ext = voiceExt(file);
+    const d = new Date();
+    const path = `${d.getFullYear()}/${pad(d.getMonth() + 1)}/${uid()}.${ext}`;
+    const { error } = await this.sb.storage.from('voice').upload(path, file, { contentType: file.type || 'audio/mp4', upsert: false });
+    if (error) throw error;
+    return path;
+  }
+  async voiceUrl(path) {
+    const { data, error } = await this.sb.storage.from('voice').createSignedUrl(path, 3600);
+    if (error) throw error;
+    return data.signedUrl;
+  }
+  async deleteVoice(path) { try { await this.sb.storage.from('voice').remove([path]); } catch (e) { /* ignoré */ } }
+}
+
+function voiceExt(file) {
+  const n = (file.name || '').toLowerCase();
+  const m = n.match(/\.([a-z0-9]{2,5})$/);
+  if (m) return m[1];
+  const t = (file.type || '').toLowerCase();
+  if (t.includes('mp4') || t.includes('m4a') || t.includes('aac')) return 'm4a';
+  if (t.includes('webm')) return 'webm';
+  if (t.includes('ogg') || t.includes('opus')) return 'ogg';
+  if (t.includes('mpeg') || t.includes('mp3')) return 'mp3';
+  if (t.includes('wav')) return 'wav';
+  return 'audio';
+}
+
+/* ---------- mode démo : mêmes règles que la base Supabase ---------- */
+class DemoAPI {
+  constructor() {
+    this.mode = 'demo';
+    this.voices = {};
+    this.db = local.get('dm.demo');
+    if (!this.db || !Array.isArray(this.db.orders)) { this.db = seedDemo(); this.save(); }
+  }
+  save() { local.set('dm.demo', this.db); }
+  reset() { this.db = seedDemo(); this.save(); }
+  async session() { return { user: { email: 'demo' } }; }
+  async signIn() { }
+  async signOut() { }
+  onAuthLost() { }
+  _comm(o) { return o.status === 'completed' ? round2(num(o.price) * num(o.commission_rate)) : 0; }
+  _drv(id) { return this.db.drivers.find((d) => d.id === id); }
+  _order(o) { const d = this._drv(o.driver_id); return { ...o, commission: this._comm(o), driver: d ? { id: d.id, phone: d.phone, name: d.name } : null }; }
+  _bal(d) {
+    const tops = this.db.topups.filter((t) => t.driver_id === d.id);
+    const ords = this.db.orders.filter((o) => o.driver_id === d.id);
+    const total_topups = round2(tops.reduce((s, t) => s + num(t.amount), 0));
+    const total_commission = round2(ords.reduce((s, o) => s + this._comm(o), 0));
+    return {
+      ...d, total_topups, total_commission,
+      completed_orders: ords.filter((o) => o.status === 'completed').length,
+      pending_orders: ords.filter((o) => o.status === 'pending').length,
+      balance: round2(total_topups - total_commission),
+      last_topup_at: tops.reduce((m, t) => (!m || t.topup_at > m ? t.topup_at : m), null),
+    };
+  }
+  _inRange(iso, from, to) { const d = localDay(iso); return (!from || d >= from) && (!to || d <= to); }
+
+  async getSettings() { return { ...this.db.settings }; }
+  async saveSettings(p) { Object.assign(this.db.settings, p); this.save(); return { ...this.db.settings }; }
+
+  async listDrivers() { return this.db.drivers.map((d) => this._bal(d)); }
+  async getDriver(id) { const d = this._drv(id); if (!d) throw new Error('not found'); return this._bal(d); }
+  async saveDriver(d) {
+    const phone = cleanPhone(d.phone);
+    if (this.db.drivers.some((x) => x.phone === phone && x.id !== d.id)) throw { code: '23505', message: 'duplicate' };
+    if (d.id) { Object.assign(this._drv(d.id), { phone, name: d.name || null, notes: d.notes || null, active: d.active !== false }); this.save(); return this._drv(d.id); }
+    const row = { id: uid(), phone, name: d.name || null, notes: d.notes || null, active: true, created_at: new Date().toISOString() };
+    this.db.drivers.push(row); this.save(); return row;
+  }
+  async deleteDriver(id) {
+    if (this.db.orders.some((o) => o.driver_id === id) || this.db.topups.some((t) => t.driver_id === id)) throw { code: '23503', message: 'restrict' };
+    this.db.drivers = this.db.drivers.filter((d) => d.id !== id); this.save();
+  }
+
+  async listOrders({ from, to, status, driverId, limit = 2000 } = {}) {
+    return this.db.orders
+      .filter((o) => this._inRange(o.ordered_at, from, to) && (!status || o.status === status) && (!driverId || o.driver_id === driverId))
+      .sort((a, b) => (a.ordered_at < b.ordered_at ? 1 : -1))
+      .slice(0, limit)
+      .map((o) => this._order(o));
+  }
+  async saveOrder(o) {
+    const row = pick(o, ORDER_FIELDS);
+    if (o.id) {
+      const cur = this.db.orders.find((x) => x.id === o.id);
+      if (!cur) throw new Error('not found');
+      const wasDone = cur.status === 'completed';
+      Object.assign(cur, row);
+      if (cur.status === 'completed') { if (!wasDone) cur.completed_at = new Date().toISOString(); } else cur.completed_at = null;
+      this.save(); return this._order(cur);
+    }
+    this.db.seq = (this.db.seq || 0) + 1;
+    const now = new Date().toISOString();
+    const rec = {
+      id: uid(), ref: 'T-' + String(this.db.seq).padStart(5, '0'), ordered_at: now, status: 'pending',
+      voice_path: null, notes: null, ...row,
+      commission_rate: num(this.db.settings.commission_rate), created_at: now, completed_at: null,
+    };
+    if (rec.status === 'completed') rec.completed_at = now;
+    this.db.orders.push(rec); this.save(); return this._order(rec);
+  }
+  setOrderStatus(id, status) { return this.saveOrder({ id, status }); }
+  async deleteOrder(id) { this.db.orders = this.db.orders.filter((o) => o.id !== id); this.save(); }
+
+  async listTopups({ from, to, driverId, limit = 2000 } = {}) {
+    return this.db.topups
+      .filter((t) => this._inRange(t.topup_at, from, to) && (!driverId || t.driver_id === driverId))
+      .sort((a, b) => (a.topup_at < b.topup_at ? 1 : -1))
+      .slice(0, limit)
+      .map((t) => { const d = this._drv(t.driver_id); return { ...t, driver: d ? { id: d.id, phone: d.phone, name: d.name } : null }; });
+  }
+  async saveTopup(t) {
+    if (!(num(t.amount) > 0)) throw new Error('amount');
+    if (t.id) { Object.assign(this.db.topups.find((x) => x.id === t.id), pick(t, ['driver_id', 'amount', 'method', 'notes', 'topup_at'])); this.save(); return t; }
+    const row = { id: uid(), method: null, notes: null, topup_at: new Date().toISOString(), ...pick(t, ['driver_id', 'amount', 'method', 'notes', 'topup_at']), created_at: new Date().toISOString() };
+    this.db.topups.push(row); this.save(); return row;
+  }
+  async deleteTopup(id) { this.db.topups = this.db.topups.filter((t) => t.id !== id); this.save(); }
+
+  async stats(day) {
+    const o = this.db.orders.map((x) => ({ d: localDay(x.ordered_at), st: x.status, price: num(x.price), c: this._comm(x) }));
+    const t = this.db.topups.map((x) => ({ d: localDay(x.topup_at), a: num(x.amount) }));
+    const m0 = monthStart(day), m1 = nextMonth(day);
+    const sum = (arr, f) => round2(arr.reduce((s, x) => s + f(x), 0));
+    const drivers = await this.listDrivers();
+    return {
+      day,
+      today_commission: sum(o.filter((x) => x.d === day), (x) => x.c),
+      today_value: sum(o.filter((x) => x.d === day && x.st === 'completed'), (x) => x.price),
+      today_completed: o.filter((x) => x.d === day && x.st === 'completed').length,
+      today_pending: o.filter((x) => x.d === day && x.st === 'pending').length,
+      today_cancelled: o.filter((x) => x.d === day && x.st === 'cancelled').length,
+      month_commission: sum(o.filter((x) => x.d >= m0 && x.d < m1), (x) => x.c),
+      total_commission: sum(o, (x) => x.c),
+      today_topups: sum(t.filter((x) => x.d === day), (x) => x.a),
+      total_balance: sum(drivers, (d) => num(d.balance)),
+      pending_total: o.filter((x) => x.st === 'pending').length,
+    };
+  }
+  async daily(month) {
+    const rows = []; const m1 = nextMonth(month);
+    for (let d = monthStart(month); d < m1; d = addDays(d, 1)) rows.push({ day: d, completed_orders: 0, orders_value: 0, commission: 0, topups: 0 });
+    const idx = Object.fromEntries(rows.map((r) => [r.day, r]));
+    this.db.orders.forEach((o) => {
+      const r = idx[localDay(o.ordered_at)]; if (!r) return;
+      if (o.status === 'completed') { r.completed_orders++; r.orders_value = round2(r.orders_value + num(o.price)); }
+      r.commission = round2(r.commission + this._comm(o));
+    });
+    this.db.topups.forEach((t) => { const r = idx[localDay(t.topup_at)]; if (r) r.topups = round2(r.topups + num(t.amount)); });
+    return rows;
+  }
+  async monthly(year) {
+    const rows = Array.from({ length: 12 }, (_, i) => ({ month: i + 1, completed_orders: 0, orders_value: 0, commission: 0, topups: 0 }));
+    this.db.orders.forEach((o) => {
+      const d = new Date(o.ordered_at); if (d.getFullYear() !== Number(year)) return;
+      const r = rows[d.getMonth()];
+      if (o.status === 'completed') { r.completed_orders++; r.orders_value = round2(r.orders_value + num(o.price)); }
+      r.commission = round2(r.commission + this._comm(o));
+    });
+    this.db.topups.forEach((t) => { const d = new Date(t.topup_at); if (d.getFullYear() === Number(year)) rows[d.getMonth()].topups = round2(rows[d.getMonth()].topups + num(t.amount)); });
+    return rows;
+  }
+
+  async uploadVoice(file) { const id = uid(); this.voices[id] = URL.createObjectURL(file); return 'demo/' + id; }
+  async voiceUrl(path) { return this.voices[String(path).split('/').pop()] || null; }
+  async deleteVoice() { }
+}
+
+function seedDemo() {
+  let s = 20261121;
+  const rnd = () => (s = (s * 16807) % 2147483647) / 2147483647;
+  const choose = (a) => a[Math.floor(rnd() * a.length)];
+  const now = new Date();
+  const at = (daysAgo, h, m) => { const d = new Date(now); d.setDate(d.getDate() - daysAgo); d.setHours(h, m, 0, 0); return d; };
+  const drivers = [
+    ['44112233', 'سيدي محمد'], ['33445566', 'أحمد سالم'], ['22778899', 'محمد الأمين'], ['46123456', 'الشيخ ولد أحمد'],
+  ].map(([phone, name]) => ({ id: uid(), phone, name, active: true, notes: null, created_at: at(20, 9, 0).toISOString() }));
+  const topups = [];
+  const addTop = (di, daysAgo, amount, method) => topups.push({ id: uid(), driver_id: drivers[di].id, amount, method, notes: null, topup_at: at(daysAgo, 8, 10 + topups.length).toISOString(), created_at: at(daysAgo, 8, 10).toISOString() });
+  addTop(0, 13, 10000, 'نقداً'); addTop(1, 13, 8000, 'Bankily'); addTop(2, 12, 6000, 'Masrvi'); addTop(3, 12, 4000, 'نقداً');
+  addTop(0, 6, 8000, 'Bankily'); addTop(1, 5, 6000, 'نقداً'); addTop(2, 7, 6000, 'Masrvi'); addTop(3, 5, 1000, 'نقداً'); addTop(2, 0, 3000, 'Bankily');
+  const places = ['تفرغ زينة', 'لكصر', 'عرفات', 'توجنين', 'دار النعيم', 'الميناء', 'السبخة', 'تيارت', 'الرياض', 'سوق العاصمة', 'كارفور', 'المستشفى الوطني'];
+  const prices = [1500, 2000, 2000, 2500, 2500, 3000, 3500, 4000, 4500, 5000];
+  const raw = [];
+  for (let day = 13; day >= 1; day--) {
+    const n = 3 + Math.floor(rnd() * 5);
+    for (let k = 0; k < n; k++) {
+      const di = rnd() < 0.15 ? 3 : Math.floor(rnd() * 3);
+      const r = rnd();
+      raw.push({ when: at(day, 8 + Math.floor(rnd() * 13), Math.floor(rnd() * 60)), di, status: r < 0.08 ? 'cancelled' : 'completed' });
+    }
+  }
+  for (let k = 6; k >= 1; k--) {
+    const when = new Date(now.getTime() - k * 52 * 60000);
+    if (localDay(when.toISOString()) !== ymd(now)) continue;
+    raw.push({ when, di: k % 3, status: k <= 2 ? 'pending' : 'completed' });
+  }
+  raw.sort((a, b) => a.when - b.when);
+  const orders = raw.map((x, i) => {
+    let from = choose(places), to = choose(places);
+    if (to === from) to = places[(places.indexOf(from) + 3) % places.length];
+    const iso = x.when.toISOString();
+    return {
+      id: uid(), ref: 'T-' + String(i + 1).padStart(5, '0'), ordered_at: iso,
+      customer_phone: choose(['2', '3', '4']) + String(Math.floor(1000000 + rnd() * 8999999)),
+      driver_id: drivers[x.di].id, pickup: from, dropoff: to, price: choose(prices), commission_rate: 0.15,
+      status: x.status, completed_at: x.status === 'completed' ? iso : null, voice_path: null,
+      notes: x.status === 'cancelled' ? 'ألغى الزبون الطلب' : null, created_at: iso,
+    };
+  });
+  return {
+    settings: { id: 1, business_name: 'Delivery Manager', commission_rate: 0.15, low_balance: 1000, currency: 'أوقية' },
+    drivers, topups, orders, seq: orders.length,
+  };
+}
+
+/* =====================================================================
+   APPLICATION
+   ===================================================================== */
+const app = {
+  api: null, cfg: null, settings: null, user: null,
+  drivers: [], orderIndex: new Map(), places: new Set(), charts: {},
+  view: 'home', driverId: null, renderSeq: 0, refocus: null, cache: {}, cacheOK: false,
+  last: {},
+  f: {
+    orders: { period: 'today', from: '', to: '', status: '', driverId: '', q: '' },
+    topups: { period: 'month', from: '', to: '', driverId: '' },
+    drivers: { q: '', show: 'active' },
+    reports: { month: monthStart(today()), year: new Date().getFullYear() },
+  },
+};
+const NOUAKCHOTT = ['تفرغ زينة', 'لكصر', 'السبخة', 'الميناء', 'عرفات', 'الرياض', 'توجنين', 'دار النعيم', 'تيارت'];
+const curText = () => (app.settings && app.settings.currency) || 'أوقية';
+const cur = () => esc(curText());
+const rate = () => num(app.settings ? app.settings.commission_rate : 0.15);
+const lowLimit = () => num(app.settings ? app.settings.low_balance : 1000);
+const pct = (r) => NF.format(round2(num(r) * 100)) + '%';
+const dtext = (d) => (d ? (d.name ? `${d.name} (${d.phone})` : d.phone) : '—');
+const dhtml = (d) => (d ? (d.name ? `${esc(d.name)} <span class="ltr muted">${esc(d.phone)}</span>` : `<span class="ltr">${esc(d.phone)}</span>`) : '—');
+const sumOf = (arr, k) => round2(arr.reduce((s, x) => s + num(x[k]), 0));
+
+const VIEWS = {
+  home: { title: 'لوحة التحكم', icon: 'home', short: 'الرئيسية', render: viewHome },
+  orders: { title: 'الطلبات', icon: 'box', short: 'الطلبات', render: viewOrders },
+  drivers: { title: 'السائقون', icon: 'users', short: 'السائقون', render: viewDrivers },
+  topups: { title: 'شحن الأرصدة', icon: 'wallet', short: 'الشحن', render: viewTopups },
+  reports: { title: 'التقارير', icon: 'chart', short: 'التقارير', render: viewReports },
+  options: { title: 'الإعدادات', icon: 'sliders', short: 'الإعدادات', render: viewOptions },
+  driver: { title: 'كشف حساب سائق', nav: false, render: viewDriver },
+};
+const PERIODS = [['today', 'اليوم'], ['yesterday', 'أمس'], ['week', 'آخر 7 أيام'], ['month', 'هذا الشهر'], ['lastmonth', 'الشهر الماضي'], ['all', 'الكل'], ['custom', 'فترة محددة']];
+
+function periodRange(f) {
+  const t = today();
+  switch (f.period) {
+    case 'today': return [t, t];
+    case 'yesterday': return [addDays(t, -1), addDays(t, -1)];
+    case 'week': return [addDays(t, -6), t];
+    case 'month': return [monthStart(t), t];
+    case 'lastmonth': { const end = addDays(monthStart(t), -1); return [monthStart(end), end]; }
+    case 'custom': return [f.from || '', f.to || ''];
+    default: return ['', ''];
+  }
+}
+
+async function loadDrivers() { app.drivers = await app.api.listDrivers(); return app.drivers; }
+function indexOrders(rows) {
+  rows.forEach((o) => { app.orderIndex.set(o.id, o); if (o.pickup) app.places.add(o.pickup); if (o.dropoff) app.places.add(o.dropoff); });
+}
+async function ensurePlaces() {
+  if (app.places.size < 3) { try { indexOrders(await app.api.listOrders({ limit: 300 })); } catch (e) { /* ignoré */ } }
+}
+function invalidate() { app.cache = {}; }
+
+/* ---------- coque de l'application ---------- */
+function renderShell() {
+  const nav = Object.entries(VIEWS).filter(([, v]) => v.nav !== false);
+  const demo = app.api.mode === 'demo';
+  $('#root').innerHTML = `
+  <div class="shell">
+    <aside class="side" aria-label="القائمة الرئيسية">
+      <div class="brand"><div class="brand-mark">${ic('truck')}</div>
+        <div class="brand-text"><b data-biz>${esc(app.settings.business_name)}</b><span>إدارة التوصيل والأرصدة</span></div></div>
+      <nav class="nav">${nav.map(([k, v]) => `<a href="#${k}" data-nav="${k}">${ic(v.icon)}<span>${v.title}</span><span class="short">${v.short}</span></a>`).join('')}</nav>
+      <div class="side-foot"><span class="mode-badge ${demo ? 'demo' : ''}">${demo ? 'وضع تجريبي' : 'متصل بقاعدة البيانات'}</span><span>الإصدار ${APP_VERSION}</span></div>
+    </aside>
+    <div class="content">
+      ${demo ? `<div class="demo-strip no-print">${ic('alert')}<span>${DEMO_BUILD ? 'نسخة عرض ببيانات تجريبية، محفوظة على هذا الجهاز فقط.' : 'وضع تجريبي: البيانات محفوظة على هذا الجهاز فقط.'}</span>${DEMO_BUILD ? '' : '<button type="button" class="btn sm" data-action="leave-demo">ربط قاعدة البيانات</button>'}</div>` : ''}
+      <header class="topbar"><h1 data-title></h1>
+        <div class="topbar-actions">
+          <button type="button" class="btn" data-action="new-topup">${ic('wallet')}<span>شحن رصيد</span></button>
+          <button type="button" class="btn primary" data-action="new-order">${ic('plus')}<span>طلب جديد</span></button>
+        </div></header>
+      <main id="main" tabindex="-1"></main>
+    </div>
+    <nav class="tabbar" aria-label="القائمة">${nav.map(([k, v]) => `<a href="#${k}" data-nav="${k}">${ic(v.icon)}<span>${v.short}</span></a>`).join('')}</nav>
+  </div>`;
+}
+
+function currentView() { const h = location.hash.replace('#', ''); return VIEWS[h] ? h : 'home'; }
+
+async function render() {
+  const main = $('#main');
+  if (!main) return;
+  let v = currentView();
+  if (v === 'driver' && !app.driverId) { v = 'drivers'; try { history.replaceState(null, '', '#drivers'); } catch (e) { /* ignoré */ } }
+  const seq = ++app.renderSeq;
+  const navKey = v === 'driver' ? 'drivers' : v;
+  $$('[data-nav]').forEach((a) => (a.dataset.nav === navKey ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current')));
+  $('[data-title]').textContent = VIEWS[v].title;
+  if (main.dataset.view !== v) {
+    main.innerHTML = '<div class="loading"><span class="spin"></span><span>جارٍ التحميل…</span></div>';
+    window.scrollTo(0, 0);
+  }
+  main.dataset.view = v;
+  app.view = v;
+  try {
+    await VIEWS[v].render(seq);
+  } catch (e) {
+    console.error(e);
+    if (seq !== app.renderSeq) return;
+    main.innerHTML = `<section class="panel"><div class="empty"><p>${esc(errMsg(e))}</p>
+      <button type="button" class="btn primary" data-action="retry">إعادة المحاولة</button></div></section>`;
+  }
+}
+
+function paint(seq, html, bind) {
+  if (seq !== app.renderSeq) return false;
+  const main = $('#main');
+  main.innerHTML = html;
+  bindCharts(main);
+  bindFilters(main);
+  if (bind) bind(main);
+  return true;
+}
+
+function bindFilters(root) {
+  $$('[data-set]', root).forEach((b) => b.addEventListener('click', () => {
+    const [s, k] = b.dataset.set.split('.');
+    app.f[s][k] = b.dataset.value;
+    render();
+  }));
+  $$('[data-filter]', root).forEach((inp) => {
+    const [s, k] = inp.dataset.filter.split('.');
+    const apply = () => {
+      let v = inp.value;
+      if (s === 'reports' && k === 'month') v = v ? v.slice(0, 7) + '-01' : monthStart(today());
+      app.f[s][k] = v;
+      render();
+    };
+    if (inp.type === 'search') {
+      inp.addEventListener('input', debounce(() => { app.refocus = inp.dataset.filter; app.cacheOK = true; apply(); }, 280));
+    } else inp.addEventListener('change', apply);
+  });
+  if (app.refocus) {
+    const el = $(`[data-filter="${app.refocus}"]`, root);
+    app.refocus = null;
+    if (el) { el.focus(); const n = el.value.length; try { el.setSelectionRange(n, n); } catch (e) { /* ignoré */ } }
+  }
+}
+
+const chips = (scope, key, options, val) => `<div class="chips" role="group">${options.map(([k, l]) =>
+  `<button type="button" class="chip" data-set="${scope}.${key}" data-value="${k}" aria-pressed="${String(val) === String(k)}">${l}</button>`).join('')}</div>`;
+const customRange = (scope, f) => `<div class="filters"><label class="field"><span>من</span><input class="input compact" type="date" value="${esc(f.from)}" data-filter="${scope}.from"></label>
+  <label class="field"><span>إلى</span><input class="input compact" type="date" value="${esc(f.to)}" data-filter="${scope}.to"></label></div>`;
+const driverSelect = (filter, val, allLabel = 'كل السائقين') => `<select class="input compact" data-filter="${filter}" aria-label="السائق">
+  <option value="">${allLabel}</option>${app.drivers.map((d) => `<option value="${d.id}" ${d.id === val ? 'selected' : ''}>${esc(dtext(d))}</option>`).join('')}</select>`;
+const emptyState = (text, btnLabel, action) => `<div class="empty"><p>${text}</p>${btnLabel ? `<button type="button" class="btn primary" data-action="${action}">${ic('plus')} ${btnLabel}</button>` : ''}</div>`;
+
+/* ---------- graphique en barres ---------- */
+function niceMax(v) {
+  if (v <= 0) return 100;
+  const p = Math.pow(10, Math.floor(Math.log10(v)));
+  const m = v / p;
+  return (m <= 1 ? 1 : m <= 2 ? 2 : m <= 2.5 ? 2.5 : m <= 5 ? 5 : 10) * p;
+}
+function barChart(rows, key = 'commission') {
+  const id = 'c' + Math.random().toString(36).slice(2, 9);
+  app.charts[id] = rows;
+  const W = 760, H = 220, L = 52, R = 8, T = 12, B = 28;
+  const n = rows.length || 1;
+  const vals = rows.map((r) => num(r[key]));
+  const max = niceMax(Math.max(0, ...vals));
+  const pw = W - L - R, ph = H - T - B, step = pw / n, bw = Math.max(4, Math.min(20, step - 3));
+  const base = T + ph;
+  const t = today();
+  const grid = [0, 0.5, 1].map((f) => {
+    const y = base - f * ph;
+    return `<line x1="${L}" x2="${W - R}" y1="${y}" y2="${y}"/><text x="${L - 8}" y="${y + 4}" text-anchor="end">${NF.format(max * f)}</text>`;
+  }).join('');
+  const bars = rows.map((r, i) => {
+    const v = num(r[key]); if (v <= 0) return '';
+    const h = (v / max) * ph, x = L + i * step + (step - bw) / 2, y = base - h, rr = Math.min(4, bw / 2, h);
+    return `<path class="bar ${r.day === t ? 'today' : ''}" data-i="${i}" d="M${x},${base}V${y + rr}Q${x},${y} ${x + rr},${y}H${x + bw - rr}Q${x + bw},${y} ${x + bw},${y + rr}V${base}Z"/>`;
+  }).join('');
+  const labels = rows.map((r, i) => {
+    const day = Number(String(r.day).slice(8, 10));
+    if (!(day === 1 || day % 5 === 0)) return '';
+    return `<text x="${L + i * step + step / 2}" y="${H - 8}" text-anchor="middle">${day}</text>`;
+  }).join('');
+  const hits = rows.map((r, i) => `<rect class="hit" data-i="${i}" x="${L + i * step}" y="${T}" width="${step}" height="${ph}"/>`).join('');
+  const total = sumOf(rows, key);
+  return `<div class="chart" dir="ltr" data-chart="${id}">
+    <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="العمولة اليومية، المجموع ${money(total)} ${cur()}">
+      <g class="grid axis">${grid}</g><g>${bars}</g><g class="axis">${labels}</g><g>${hits}</g></svg>
+    <div class="tip" hidden></div></div>`;
+}
+function bindCharts(root) {
+  $$('.chart', root).forEach((ch) => {
+    const rows = app.charts[ch.dataset.chart] || [];
+    const tip = $('.tip', ch), svg = $('svg', ch);
+    const show = (e) => {
+      const hit = e.target.closest && e.target.closest('.hit'); if (!hit) return;
+      const i = Number(hit.dataset.i), r = rows[i]; if (!r) return;
+      $$('.bar', ch).forEach((b) => b.classList.toggle('on', b.dataset.i === String(i)));
+      tip.innerHTML = `<b>${WEEKDAYS[parseYmd(r.day).getDay()]} ${fmtDate(r.day)}</b><br>أرباحك: ${money(r.commission)} ${cur()}<br>طلبات مكتملة: ${num(r.completed_orders)}`;
+      tip.hidden = false;
+      const box = svg.getBoundingClientRect();
+      const bar = $(`.bar[data-i="${i}"]`, ch);
+      const hb = hit.getBoundingClientRect();
+      const top = bar ? bar.getBoundingClientRect().top : hb.bottom;
+      const x = Math.max(80, Math.min(box.width - 80, hb.left + hb.width / 2 - box.left));
+      tip.style.left = x + 'px';
+      tip.style.top = (top - box.top - 6) + 'px';
+    };
+    ch.addEventListener('pointerover', show);
+    ch.addEventListener('pointerdown', show);
+    ch.addEventListener('pointerleave', () => { tip.hidden = true; $$('.bar.on', ch).forEach((b) => b.classList.remove('on')); });
+  });
+}
+
+/* ---------- tableau de bord ---------- */
+async function viewHome(seq) {
+  const day = today();
+  const [s, daily, pending] = await Promise.all([
+    app.api.stats(day), app.api.daily(monthStart(day)), app.api.listOrders({ status: 'pending', limit: 50 }), loadDrivers(),
+  ]);
+  indexOrders(pending);
+  const low = app.drivers.filter((d) => d.active && num(d.balance) < lowLimit()).sort((a, b) => num(a.balance) - num(b.balance));
+  const kpi = (label, v, cls = '') => `<div class="kpi ${cls}"><p class="kpi-label">${label}</p><p class="kpi-value">${money(v)} <small>${cur()}</small></p></div>`;
+  const now = new Date();
+  paint(seq, `
+    <section class="hero">
+      <div class="hero-main">
+        <p class="hero-date">${WEEKDAYS[now.getDay()]} ${fmtDate(now)}</p>
+        <p class="hero-label">أرباحك اليوم</p>
+        <p class="hero-value"><span class="num">${money(s.today_commission)}</span> <span class="cur">${cur()}</span></p>
+        <p class="hero-sub">طلبات مكتملة: ${num(s.today_completed)}، قيد التنفيذ: ${num(s.today_pending)}${num(s.today_cancelled) ? `، ملغاة: ${num(s.today_cancelled)}` : ''}، قيمة التوصيل: ${money(s.today_value)} ${cur()}</p>
+      </div>
+      <div class="hero-actions no-print">
+        <button type="button" class="btn gold lg" data-action="new-order">${ic('plus')} طلب جديد</button>
+        <button type="button" class="btn on-dark lg" data-action="new-topup">${ic('wallet')} شحن رصيد</button>
+      </div>
+    </section>
+    <section class="kpis">
+      ${kpi('أرباح هذا الشهر', s.month_commission)}
+      ${kpi('إجمالي الأرباح', s.total_commission)}
+      ${kpi('شحن اليوم', s.today_topups)}
+      ${kpi('مجموع أرصدة السائقين', s.total_balance, num(s.total_balance) < 0 ? 'neg' : '')}
+    </section>
+    <section class="panel">
+      <header class="panel-head"><h2>أرباح ${esc(monthName(day))} يوماً بيوم</h2><a class="link" href="#reports">التقرير الكامل</a></header>
+      ${barChart(daily)}
+    </section>
+    <div class="grid-2">
+      <section class="panel">
+        <header class="panel-head"><h2>طلبات قيد التنفيذ</h2><span class="count">${pending.length}</span></header>
+        ${pending.length ? `<div class="mini-list">${pending.map((o) => `
+          <div class="mini"><div><p class="mini-title">${esc(o.pickup)} <span class="muted">←</span> ${esc(o.dropoff)}</p>
+            <p class="mini-sub"><span class="ltr">${esc(o.ref)}</span> – ${fmtShort(o.ordered_at)} ${fmtTime(o.ordered_at)} – ${dhtml(o.driver)} – ${money(o.price)}</p></div>
+            <div class="mini-actions"><button type="button" class="btn sm ok-soft" data-action="complete-order" data-id="${o.id}">${ic('check')} إكمال</button>
+            <button type="button" class="icon-btn" data-action="edit-order" data-id="${o.id}" aria-label="فتح الطلب">${ic('edit')}</button></div></div>`).join('')}</div>`
+          : emptyState('لا توجد طلبات قيد التنفيذ.', 'طلب جديد', 'new-order')}
+      </section>
+      <section class="panel">
+        <header class="panel-head"><h2>أرصدة تحتاج إلى شحن</h2><span class="count">${low.length}</span></header>
+        ${low.length ? `<div class="mini-list">${low.map((d) => `
+          <div class="mini"><div><p class="mini-title">${dhtml(d)}</p>
+            <p class="mini-sub">الرصيد <b class="${num(d.balance) < 0 ? 'neg-text' : ''}">${money(d.balance)}</b> ${cur()}${num(d.balance) < 0 ? '، رصيد سالب' : ''}</p></div>
+            <div class="mini-actions"><button type="button" class="btn sm" data-action="new-topup" data-driver="${d.id}">${ic('wallet')} شحن</button></div></div>`).join('')}</div>`
+          : `<div class="empty"><p>كل الأرصدة أعلى من ${money(lowLimit())} ${cur()}.</p></div>`}
+      </section>
+    </div>`);
+}
+
+/* ---------- commandes ---------- */
+async function viewOrders(seq) {
+  const f = app.f.orders;
+  const [from, to] = periodRange(f);
+  const key = JSON.stringify([from, to, f.status, f.driverId]);
+  let rows;
+  if (app.cacheOK && app.cache.ordersKey === key) rows = app.cache.orders;
+  else {
+    [rows] = await Promise.all([app.api.listOrders({ from, to, status: f.status, driverId: f.driverId }), app.drivers.length ? null : loadDrivers()]);
+    app.cache.orders = rows; app.cache.ordersKey = key;
+  }
+  app.cacheOK = false;
+  indexOrders(rows);
+  const q = f.q.trim().toLowerCase();
+  const list = q ? rows.filter((o) => [o.ref, o.customer_phone, o.pickup, o.dropoff, o.notes, o.driver && o.driver.name, o.driver && o.driver.phone]
+    .some((v) => String(v || '').toLowerCase().includes(q))) : rows;
+  app.last.orders = list;
+  const done = list.filter((o) => o.status === 'completed');
+  paint(seq, `
+    <section class="panel">
+      <div class="filters">${chips('orders', 'period', PERIODS, f.period)}</div>
+      ${f.period === 'custom' ? `<div style="margin-top:12px">${customRange('orders', f)}</div>` : ''}
+      <div class="filters" style="margin-top:12px">
+        ${chips('orders', 'status', [['', 'كل الحالات'], ['pending', 'قيد التنفيذ'], ['completed', 'مكتمل'], ['cancelled', 'ملغى']], f.status)}
+        ${driverSelect('orders.driverId', f.driverId)}
+        <label class="search">${ic('search')}<span class="sr-only">بحث</span><input class="input" type="search" placeholder="بحث برقم الطلب أو الهاتف أو المكان" value="${esc(f.q)}" data-filter="orders.q"></label>
+      </div>
+    </section>
+    <section class="panel">
+      <header class="panel-head">
+        <div class="summary"><span>عدد الطلبات: <b>${list.length}</b></span><span>المكتملة: <b>${done.length}</b></span>
+          <span>قيمة المكتمل: <b>${money(sumOf(done, 'price'))}</b></span><span>عمولتك: <b>${money(sumOf(list, 'commission'))}</b> ${cur()}</span></div>
+        <span class="spacer" style="flex:1"></span>
+        <button type="button" class="btn sm ghost no-print" data-action="export-orders">${ic('download')} تصدير CSV</button>
+      </header>
+      ${list.length ? `<div class="olist">
+        <div class="orow head"><span>الطلب</span><span>المسار</span><span>الزبون والسائق</span><span style="text-align:end">السعر</span><span style="text-align:end">العمولة</span><span>الحالة</span></div>
+        ${list.map(orderRow).join('')}</div>`
+        : emptyState(q || f.status || f.driverId ? 'لا توجد طلبات تطابق البحث.' : 'لا توجد طلبات في هذه الفترة.', 'طلب جديد', 'new-order')}
+    </section>`);
+}
+
+function orderRow(o) {
+  const st = STATUS[o.status] || STATUS.pending;
+  return `<article class="orow" data-action="edit-order" data-id="${o.id}" tabindex="0" role="button" aria-label="الطلب ${esc(o.ref)}">
+    <div class="c-ref"><b class="ltr">${esc(o.ref)}</b><span>${fmtShort(o.ordered_at)} ${fmtTime(o.ordered_at)}</span></div>
+    <div class="c-route">${esc(o.pickup)}<span class="arrow">←</span>${esc(o.dropoff)}${o.notes ? `<span class="muted" style="display:block;font-size:13px;font-weight:400">${esc(o.notes)}</span>` : ''}</div>
+    <div class="c-people"><span>الزبون: <a class="ltr" href="tel:${esc(o.customer_phone)}" data-tel>${esc(o.customer_phone)}</a></span><span>السائق: ${dhtml(o.driver)}</span></div>
+    <div class="c-price"><span class="cell-label">السعر</span>${money(o.price)}</div>
+    <div class="c-comm"><span class="cell-label">العمولة</span>${o.status === 'completed' ? money(o.commission) : '<span class="muted">—</span>'}</div>
+    <div class="c-status"><span class="pill ${st.cls}">${st.label}</span></div>
+    <div class="c-actions">${o.voice_path ? `<button type="button" class="icon-btn" data-action="play-voice" data-id="${o.id}" aria-label="تشغيل الرسالة الصوتية">${ic('play')}</button>` : ''}${o.status === 'pending'
+      ? `<button type="button" class="btn sm ok-soft" data-action="complete-order" data-id="${o.id}">${ic('check')} إكمال</button><button type="button" class="btn sm ghost" data-action="cancel-order" data-id="${o.id}" aria-label="إلغاء الطلب ${esc(o.ref)}">إلغاء</button>` : ''}</div>
+  </article>`;
+}
+
+/* ---------- chauffeurs ---------- */
+function balanceFlag(d) {
+  const b = num(d.balance);
+  if (!d.active) return '<span class="flag off">موقوف</span>';
+  if (b < 0) return `<span class="flag neg">${ic('alert')} رصيد سالب</span>`;
+  if (b < lowLimit()) return `<span class="flag low">${ic('alert')} رصيد منخفض</span>`;
+  return '';
+}
+async function viewDrivers(seq) {
+  const f = app.f.drivers;
+  await loadDrivers();
+  const q = f.q.trim().toLowerCase();
+  const list = app.drivers
+    .filter((d) => (f.show === 'all' || (f.show === 'active' ? d.active : !d.active)))
+    .filter((d) => !q || String(d.name || '').toLowerCase().includes(q) || String(d.phone).includes(q))
+    .sort((a, b) => num(a.balance) - num(b.balance));
+  app.last.drivers = list;
+  paint(seq, `
+    <section class="panel">
+      <div class="filters">
+        ${chips('drivers', 'show', [['active', 'النشطون'], ['inactive', 'الموقوفون'], ['all', 'الكل']], f.show)}
+        <label class="search">${ic('search')}<span class="sr-only">بحث</span><input class="input" type="search" placeholder="بحث بالاسم أو الرقم" value="${esc(f.q)}" data-filter="drivers.q"></label>
+        <span style="flex:1"></span>
+        <button type="button" class="btn sm ghost" data-action="export-drivers">${ic('download')} تصدير CSV</button>
+        <button type="button" class="btn primary" data-action="new-driver">${ic('plus')} سائق جديد</button>
+      </div>
+    </section>
+    <section class="panel">
+      <header class="panel-head"><div class="summary"><span>عدد السائقين: <b>${list.length}</b></span>
+        <span>مجموع الأرصدة: <b>${money(sumOf(list, 'balance'))}</b> ${cur()}</span>
+        <span>مجموع الشحن: <b>${money(sumOf(list, 'total_topups'))}</b></span>
+        <span>مجموع العمولات: <b>${money(sumOf(list, 'total_commission'))}</b></span></div></header>
+      ${list.length ? `<div class="dlist">${list.map((d) => {
+        const b = num(d.balance), tt = num(d.total_topups);
+        const w = tt > 0 ? Math.max(0, Math.min(100, (b / tt) * 100)) : 0;
+        const cls = b < 0 ? 'neg' : b < lowLimit() ? 'low' : '';
+        return `<article class="drow ${d.active ? '' : 'off'}" data-action="open-driver" data-id="${d.id}" tabindex="0" role="button" aria-label="كشف حساب ${esc(dtext(d))}">
+          <div class="d-id"><b>${esc(d.name || 'بدون اسم')}</b><span class="ltr">${esc(d.phone)}</span></div>
+          <div class="d-bal"><div class="d-bal-line"><span class="muted">الرصيد</span><b class="${b < 0 ? 'neg-text' : ''}">${money(b)}</b><span class="muted">${cur()}</span>${balanceFlag(d)}</div>
+            <div class="meter ${cls}" role="img" aria-label="المتبقي من الشحن ${Math.round(w)}%"><i style="width:${w}%"></i></div></div>
+          <div class="d-stats"><span>شحن ${money(tt)}</span><span>عمولات ${money(d.total_commission)}</span><span>طلبات مكتملة: ${num(d.completed_orders)}</span>${num(d.pending_orders) ? `<span>قيد التنفيذ: ${num(d.pending_orders)}</span>` : ''}</div>
+          <div class="d-actions"><button type="button" class="btn sm" data-action="new-topup" data-driver="${d.id}">${ic('wallet')} شحن</button></div>
+        </article>`;
+      }).join('')}</div>` : emptyState(app.drivers.length ? 'لا يوجد سائق يطابق البحث.' : 'أضف أول سائق لتبدأ بتسجيل الطلبات.', 'سائق جديد', 'new-driver')}
+    </section>`);
+}
+
+async function viewDriver(seq) {
+  const id = app.driverId;
+  const [d, tops, ords] = await Promise.all([app.api.getDriver(id), app.api.listTopups({ driverId: id }), app.api.listOrders({ driverId: id })]);
+  indexOrders(ords);
+  const done = ords.filter((o) => o.status === 'completed');
+  const pending = ords.filter((o) => o.status === 'pending');
+  const b = num(d.balance);
+  paint(seq, `
+    <div class="toolbar no-print">
+      <button type="button" class="btn ghost" data-action="back-drivers">${ic('back')} السائقون</button>
+      <span class="spacer"></span>
+      <button type="button" class="btn" data-action="edit-driver" data-id="${d.id}">${ic('edit')} تعديل</button>
+      <button type="button" class="btn" data-action="print">${ic('print')} طباعة الكشف</button>
+      <button type="button" class="btn primary" data-action="new-topup" data-driver="${d.id}">${ic('wallet')} شحن الرصيد</button>
+    </div>
+    <section class="panel statement">
+      <header class="st-head">
+        <div><h2>كشف حساب سائق</h2><p class="muted">${esc(app.settings.business_name)}</p></div>
+        <dl><dt>رقم السائق</dt><dd><span class="ltr">${esc(d.phone)}</span></dd><dt>الاسم</dt><dd>${esc(d.name || '—')}</dd>
+          <dt>تاريخ الكشف</dt><dd>${fmtDate(new Date())}</dd><dt>الحالة</dt><dd>${d.active ? 'نشط' : 'موقوف'}</dd></dl>
+      </header>
+      <table class="t st-sum">
+        <thead><tr><th>البيان</th><th class="n">المبلغ (${cur()})</th></tr></thead>
+        <tbody><tr><td>مجموع الشحن</td><td class="n">${money(d.total_topups)}</td></tr>
+          <tr><td>مجموع العمولات (طلبات مكتملة: ${num(d.completed_orders)})</td><td class="n">${money(d.total_commission)}</td></tr></tbody>
+        <tfoot><tr><td>الرصيد المتبقي</td><td class="n ${b < 0 ? 'neg' : ''}">${money(b)}</td></tr></tfoot>
+      </table>
+      ${pending.length ? `<p class="notice">طلبات قيد التنفيذ لهذا السائق: ${pending.length}. تُخصم عمولتها عند إكمالها.</p>` : ''}
+      <div class="st-section"><h3>سجل الشحن</h3>
+        ${tops.length ? `<div class="table-wrap"><table class="t"><thead><tr><th>التاريخ</th><th>طريقة الدفع</th><th>ملاحظات</th><th class="n">المبلغ</th><th class="no-print"></th></tr></thead>
+          <tbody>${tops.map((t) => `<tr><td>${fmtDate(t.topup_at)} <span class="muted">${fmtTime(t.topup_at)}</span></td><td>${esc(t.method || '—')}</td><td>${esc(t.notes || '')}</td><td class="n">${money(t.amount)}</td>
+            <td class="n no-print"><button type="button" class="icon-btn" data-action="delete-topup" data-id="${t.id}" aria-label="حذف الشحن">${ic('trash')}</button></td></tr>`).join('')}</tbody>
+          <tfoot><tr><td colspan="3">المجموع</td><td class="n">${money(sumOf(tops, 'amount'))}</td><td class="no-print"></td></tr></tfoot></table></div>`
+          : '<p class="muted">لا يوجد شحن بعد.</p>'}
+      </div>
+      <div class="st-section"><h3>الطلبات المكتملة</h3>
+        ${done.length ? `<div class="table-wrap"><table class="t"><thead><tr><th>رقم الطلب</th><th>التاريخ</th><th>المسار</th><th class="n">السعر</th><th class="n">العمولة</th></tr></thead>
+          <tbody>${done.map((o) => `<tr data-action="edit-order" data-id="${o.id}" style="cursor:pointer"><td class="ltr">${esc(o.ref)}</td><td>${fmtDate(o.ordered_at)} <span class="muted">${fmtTime(o.ordered_at)}</span></td>
+            <td>${esc(o.pickup)} ← ${esc(o.dropoff)}</td><td class="n">${money(o.price)}</td><td class="n">${money(o.commission)}</td></tr>`).join('')}</tbody>
+          <tfoot><tr><td colspan="3">المجموع</td><td class="n">${money(sumOf(done, 'price'))}</td><td class="n">${money(sumOf(done, 'commission'))}</td></tr></tfoot></table></div>`
+          : '<p class="muted">لا توجد طلبات مكتملة.</p>'}
+      </div>
+    </section>`);
+}
+
+/* ---------- recharges ---------- */
+async function viewTopups(seq) {
+  const f = app.f.topups;
+  const [from, to] = periodRange(f);
+  const [rows] = await Promise.all([app.api.listTopups({ from, to, driverId: f.driverId }), app.drivers.length ? null : loadDrivers()]);
+  app.last.topups = rows;
+  paint(seq, `
+    <section class="panel">
+      <div class="filters">${chips('topups', 'period', PERIODS, f.period)}</div>
+      ${f.period === 'custom' ? `<div style="margin-top:12px">${customRange('topups', f)}</div>` : ''}
+      <div class="filters" style="margin-top:12px">${driverSelect('topups.driverId', f.driverId)}<span style="flex:1"></span>
+        <button type="button" class="btn sm ghost" data-action="export-topups">${ic('download')} تصدير CSV</button>
+        <button type="button" class="btn primary" data-action="new-topup">${ic('plus')} شحن جديد</button></div>
+    </section>
+    <section class="panel">
+      <header class="panel-head"><div class="summary"><span>عدد العمليات: <b>${rows.length}</b></span><span>المجموع: <b>${money(sumOf(rows, 'amount'))}</b> ${cur()}</span></div></header>
+      ${rows.length ? `<div class="table-wrap"><table class="t"><thead><tr><th>التاريخ</th><th>السائق</th><th>طريقة الدفع</th><th>ملاحظات</th><th class="n">المبلغ</th><th></th></tr></thead>
+        <tbody>${rows.map((t) => `<tr><td>${fmtDate(t.topup_at)} <span class="muted">${fmtTime(t.topup_at)}</span></td>
+          <td><a href="#driver" data-action="open-driver" data-id="${t.driver_id}">${dhtml(t.driver)}</a></td><td>${esc(t.method || '—')}</td><td>${esc(t.notes || '')}</td>
+          <td class="n"><b>${money(t.amount)}</b></td><td class="n"><button type="button" class="icon-btn" data-action="delete-topup" data-id="${t.id}" aria-label="حذف الشحن">${ic('trash')}</button></td></tr>`).join('')}</tbody></table></div>`
+        : emptyState('لا توجد عمليات شحن في هذه الفترة.', 'شحن جديد', 'new-topup')}
+    </section>`);
+}
+
+/* ---------- rapports ---------- */
+async function viewReports(seq) {
+  const f = app.f.reports;
+  const [daily, monthly] = await Promise.all([app.api.daily(f.month), app.api.monthly(f.year)]);
+  app.last.daily = daily; app.last.monthly = monthly;
+  const t = today();
+  const y0 = new Date().getFullYear();
+  const years = []; for (let y = y0 + 1; y >= Math.min(2024, Number(f.year)); y--) years.push(y);
+  const row = (label, r, cls = '') => `<tr class="${cls} ${num(r.commission) || num(r.topups) || num(r.completed_orders) ? '' : 'zero'}"><td>${label}</td>
+    <td class="n">${num(r.completed_orders)}</td><td class="n">${money(r.orders_value)}</td><td class="n"><b>${money(r.commission)}</b></td><td class="n">${money(r.topups)}</td></tr>`;
+  const foot = (rows) => `<tfoot><tr><td>المجموع</td><td class="n">${rows.reduce((s, r) => s + num(r.completed_orders), 0)}</td>
+    <td class="n">${money(sumOf(rows, 'orders_value'))}</td><td class="n">${money(sumOf(rows, 'commission'))}</td><td class="n">${money(sumOf(rows, 'topups'))}</td></tr></tfoot>`;
+  const head = (first) => `<thead><tr><th>${first}</th><th class="n">طلبات مكتملة</th><th class="n">قيمة التوصيل</th><th class="n">أرباحك (العمولة)</th><th class="n">الشحن</th></tr></thead>`;
+  paint(seq, `
+    <div class="print-only"><h2>${esc(app.settings.business_name)} – التقارير</h2><p>تاريخ الطباعة: ${fmtDate(new Date())}</p></div>
+    <div class="toolbar no-print">
+      <label class="field"><span>الشهر</span><input class="input compact" type="month" value="${f.month.slice(0, 7)}" data-filter="reports.month"></label>
+      <span class="spacer"></span>
+      <button type="button" class="btn" data-action="print">${ic('print')} طباعة</button>
+    </div>
+    <section class="panel">
+      <header class="panel-head"><h2>التقرير اليومي – ${esc(monthName(f.month))}</h2>
+        <button type="button" class="btn sm ghost no-print" data-action="export-daily">${ic('download')} تصدير CSV</button></header>
+      ${barChart(daily)}
+      <div class="table-wrap" style="margin-top:14px"><table class="t">${head('اليوم')}
+        <tbody>${daily.map((r) => row(`${WEEKDAYS[parseYmd(r.day).getDay()]} ${fmtDate(r.day)}`, r, r.day === t ? 'is-today' : '')).join('')}</tbody>${foot(daily)}</table></div>
+    </section>
+    <section class="panel">
+      <header class="panel-head"><h2>التقرير الشهري – سنة ${esc(f.year)}</h2>
+        <select class="input compact no-print" data-filter="reports.year" aria-label="السنة">${years.map((y) => `<option ${String(y) === String(f.year) ? 'selected' : ''}>${y}</option>`).join('')}</select>
+        <button type="button" class="btn sm ghost no-print" data-action="export-monthly">${ic('download')} تصدير CSV</button></header>
+      <div class="table-wrap"><table class="t">${head('الشهر')}
+        <tbody>${monthly.map((r) => row(MONTHS[num(r.month) - 1], r)).join('')}</tbody>${foot(monthly)}</table></div>
+    </section>`);
+}
+
+/* ---------- paramètres ---------- */
+async function viewOptions(seq) {
+  const s = app.settings;
+  const demo = app.api.mode === 'demo';
+  paint(seq, `
+    <section class="panel">
+      <header class="panel-head"><h2>إعدادات النشاط</h2></header>
+      <form class="form-grid" data-settings novalidate>
+        <label class="field"><span>اسم النشاط</span><input class="input" name="business_name" value="${esc(s.business_name)}" required></label>
+        <label class="field"><span>العملة</span><input class="input" name="currency" value="${esc(s.currency)}" required></label>
+        <label class="field"><span>نسبة العمولة (%)</span><input class="input" type="number" inputmode="decimal" min="0" max="100" step="any" name="rate" value="${round2(num(s.commission_rate) * 100)}" required>
+          <small>تُطبق النسبة الجديدة على الطلبات الجديدة فقط، ولا تتغير عمولة الطلبات السابقة.</small></label>
+        <label class="field"><span>حد التنبيه للرصيد المنخفض (${cur()})</span><input class="input" type="number" inputmode="decimal" min="0" step="any" name="low_balance" value="${num(s.low_balance)}" required>
+          <small>يظهر تنبيه «رصيد منخفض» عندما يقل رصيد السائق عن هذا المبلغ.</small></label>
+        <p class="err full" data-err hidden></p>
+        <div class="modal-actions full"><button type="submit" class="btn primary">حفظ الإعدادات</button></div>
+      </form>
+    </section>
+    <section class="panel">
+      <header class="panel-head"><h2>تثبيت التطبيق على iPad</h2></header>
+      <ol class="steps"><li>افتح رابط التطبيق في متصفح Safari.</li><li>اضغط زر المشاركة (المربع مع السهم للأعلى).</li>
+        <li>اختر «إضافة إلى الشاشة الرئيسية» ثم «إضافة». يظهر التطبيق بأيقونته ويفتح بملء الشاشة.</li></ol>
+    </section>
+    <section class="panel">
+      <header class="panel-head"><h2>الحساب وقاعدة البيانات</h2></header>
+      ${demo ? `<p class="notice">التطبيق يعمل الآن في الوضع التجريبي، والبيانات محفوظة على هذا الجهاز فقط.</p>
+        <div class="modal-actions" style="justify-content:flex-start;margin-top:12px">
+          ${DEMO_BUILD ? '' : '<button type="button" class="btn primary" data-action="leave-demo">ربط قاعدة بيانات Supabase</button>'}
+          <button type="button" class="btn" data-action="reset-demo">إعادة البيانات التجريبية</button></div>`
+        : `<div style="display:grid;grid-template-columns:auto 1fr;gap:6px 16px">
+            <span class="muted">الحساب</span><span class="ltr">${esc((app.user && app.user.email) || '—')}</span>
+            <span class="muted">قاعدة البيانات</span><span class="ltr" style="word-break:break-all">${esc(app.cfg ? app.cfg.url : '')}</span></div>
+          <div class="modal-actions" style="justify-content:flex-start;margin-top:14px">
+            <button type="button" class="btn" data-action="logout">${ic('logout')} تسجيل الخروج</button>
+            ${app.cfg && !app.cfg.fixed ? '<button type="button" class="btn ghost" data-action="change-connection">تغيير إعداد الاتصال</button>' : ''}
+          </div>`}
+      <p class="muted" style="margin-top:14px;font-size:13px">Delivery Manager – الإصدار ${APP_VERSION}</p>
+    </section>`, (main) => {
+    const form = $('[data-settings]', main);
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(form);
+      const r = num(fd.get('rate'));
+      const err = $('[data-err]', form);
+      if (!String(fd.get('business_name')).trim() || !(r >= 0 && r <= 100) || num(fd.get('low_balance')) < 0) {
+        err.textContent = 'تحقق من القيم: النسبة بين 0 و 100، والمبالغ لا تكون سالبة.'; err.hidden = false; return;
+      }
+      const btn = $('[type=submit]', form);
+      busy(btn, true, 'جارٍ الحفظ');
+      try {
+        app.settings = await app.api.saveSettings({
+          business_name: String(fd.get('business_name')).trim(), currency: String(fd.get('currency')).trim() || 'أوقية',
+          commission_rate: round2(r) / 100, low_balance: num(fd.get('low_balance')),
+        });
+        $$('[data-biz]').forEach((el) => { el.textContent = app.settings.business_name; });
+        toast('تم حفظ الإعدادات.');
+        render();
+      } catch (ex) { busy(btn, false); err.textContent = errMsg(ex); err.hidden = false; }
+    });
+  });
+}
+
+/* =====================================================================
+   FORMULAIRES
+   ===================================================================== */
+function driverOptions(selectedId, includeId) {
+  return app.drivers.filter((d) => d.active || d.id === includeId || d.id === selectedId)
+    .map((d) => `<option value="${d.id}" ${d.id === selectedId ? 'selected' : ''}>${esc(dtext(d))} – رصيد ${money(d.balance)}</option>`).join('');
+}
+
+function voiceWidget(box, existingPath) {
+  const st = { file: null, url: null, removed: false, rec: null, stream: null, timer: null, t0: 0 };
+  const canRec = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder);
+  const setFile = (f) => { if (st.url) URL.revokeObjectURL(st.url); st.file = f; st.url = URL.createObjectURL(f); st.removed = true; draw(); };
+  const stopStream = () => { if (st.stream) st.stream.getTracks().forEach((t) => t.stop()); st.stream = null; clearInterval(st.timer); };
+  const draw = async () => {
+    if (st.rec) {
+      box.innerHTML = `<span class="rec-dot" aria-hidden="true"></span><span data-timer>0:00</span>
+        <button type="button" class="btn sm danger" data-v="stop">${ic('stop')} إيقاف التسجيل</button>`;
+      return;
+    }
+    const showExisting = existingPath && !st.removed && !st.file;
+    box.innerHTML = `${canRec ? `<button type="button" class="btn sm" data-v="rec">${ic('mic')} تسجيل رسالة</button>` : ''}
+      <label class="btn sm">${ic('clip')} إرفاق ملف صوتي<input type="file" class="sr-only" accept="audio/*,.m4a,.mp3,.aac,.wav,.ogg,.opus,.webm" data-v="file"></label>
+      ${st.file ? `<audio controls src="${st.url}"></audio>` : ''}${showExisting ? '<audio controls data-existing></audio>' : ''}
+      ${st.file || showExisting ? `<button type="button" class="btn sm ghost" data-v="clear">${ic('trash')} حذف الرسالة</button>` : ''}
+      ${!st.file && !showExisting ? '<span class="muted" style="font-size:14px">اختياري</span>' : ''}`;
+    if (showExisting) {
+      const a = $('audio[data-existing]', box);
+      try {
+        const u = await app.api.voiceUrl(existingPath);
+        if (u) a.src = u; else a.outerHTML = '<span class="muted">الرسالة غير متوفرة في الوضع التجريبي بعد إعادة التحميل.</span>';
+      } catch (e) { a.outerHTML = `<span class="err">${esc(errMsg(e))}</span>`; }
+    }
+  };
+  const start = async () => {
+    try {
+      st.stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const types = ['audio/mp4', 'audio/webm;codecs=opus', 'audio/webm', 'audio/ogg;codecs=opus'];
+      const mime = types.find((t) => window.MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(t)) || '';
+      const rec = new MediaRecorder(st.stream, mime ? { mimeType: mime } : undefined);
+      const chunks = [];
+      rec.ondataavailable = (e) => { if (e.data && e.data.size) chunks.push(e.data); };
+      rec.onstop = () => {
+        const type = rec.mimeType || mime || 'audio/mp4';
+        stopStream(); st.rec = null;
+        const blob = new Blob(chunks, { type });
+        const ext = type.includes('webm') ? 'webm' : type.includes('ogg') ? 'ogg' : 'm4a';
+        setFile(new File([blob], `voice.${ext}`, { type }));
+      };
+      st.rec = rec; rec.start(); st.t0 = Date.now(); draw();
+      st.timer = setInterval(() => {
+        const s = Math.floor((Date.now() - st.t0) / 1000);
+        const el = $('[data-timer]', box); if (el) el.textContent = `${Math.floor(s / 60)}:${pad(s % 60)}`;
+      }, 500);
+    } catch (e) {
+      stopStream(); st.rec = null; draw();
+      toast('لم يُسمح باستخدام الميكروفون. يمكنك إرفاق ملف صوتي بدلاً من ذلك.', 'warn');
+    }
+  };
+  box.addEventListener('click', (e) => {
+    const b = e.target.closest('button[data-v]'); if (!b) return;
+    if (b.dataset.v === 'rec') start();
+    else if (b.dataset.v === 'stop' && st.rec) st.rec.stop();
+    else if (b.dataset.v === 'clear') { st.file = null; st.removed = true; draw(); }
+  });
+  box.addEventListener('change', (e) => {
+    if (!e.target.matches('[data-v=file]')) return;
+    const f = e.target.files && e.target.files[0]; if (!f) return;
+    if (f.size > 15 * 1024 * 1024) { toast('الملف الصوتي كبير جداً (الحد 15 ميغابايت).', 'bad'); return; }
+    setFile(f);
+  });
+  draw();
+  return {
+    get file() { return st.file; },
+    get removed() { return st.removed; },
+    get recording() { return !!st.rec; },
+    dispose() { if (st.rec) { try { st.rec.onstop = null; st.rec.stop(); } catch (e) { /* ignoré */ } } stopStream(); },
+  };
+}
+
+async function orderForm(o = null) {
+  if (!app.drivers.length) await loadDrivers();
+  await ensurePlaces();
+  NOUAKCHOTT.forEach((p) => app.places.add(p));
+  const isEdit = !!o;
+  const d0 = o ? new Date(o.ordered_at) : new Date();
+  const r = isEdit ? num(o.commission_rate) : rate();
+  const statuses = isEdit ? ['pending', 'completed', 'cancelled'] : ['pending', 'completed'];
+  const html = `<form class="form-grid" novalidate>
+    <label class="field"><span>التاريخ</span><input class="input" type="date" name="date" value="${ymd(d0)}" required></label>
+    <label class="field"><span>الوقت</span><input class="input" type="time" name="time" value="${pad(d0.getHours())}:${pad(d0.getMinutes())}" required></label>
+    <label class="field"><span>رقم هاتف الزبون</span><input class="input" type="tel" inputmode="tel" dir="ltr" name="customer_phone" value="${esc(o ? o.customer_phone : '')}" autocomplete="off" required></label>
+    <div class="field"><span>السائق</span><div class="inline-row">
+      <select class="input" name="driver_id" required aria-label="السائق"><option value="">اختر السائق</option>${driverOptions(o && o.driver_id, o && o.driver_id)}</select>
+      <button type="button" class="icon-btn" data-add-driver aria-label="إضافة سائق جديد" title="سائق جديد">${ic('plus')}</button></div></div>
+    <label class="field"><span>من (مكان الانطلاق)</span><input class="input" name="pickup" list="dm-places" value="${esc(o ? o.pickup : '')}" autocomplete="off" required></label>
+    <label class="field"><span>إلى (الوجهة)</span><input class="input" name="dropoff" list="dm-places" value="${esc(o ? o.dropoff : '')}" autocomplete="off" required></label>
+    <label class="field"><span>سعر التوصيل (${cur()})</span><input class="input" type="number" inputmode="decimal" min="0" step="any" name="price" value="${o ? num(o.price) : ''}" required></label>
+    <div class="field"><span>الحالة</span><div class="seg" role="radiogroup" aria-label="الحالة">${statuses.map((s) => `<label><input type="radio" name="status" value="${s}" ${(o ? o.status : 'pending') === s ? 'checked' : ''}><span>${STATUS[s].label}</span></label>`).join('')}</div></div>
+    <div class="calc full" data-calc aria-live="polite"></div>
+    <div class="field full"><span>الرسالة الصوتية</span><div class="voice-box" data-voice></div></div>
+    <label class="field full"><span>ملاحظات</span><textarea class="input" name="notes" rows="2">${esc(o ? o.notes || '' : '')}</textarea></label>
+    <p class="err full" data-err hidden></p>
+    <div class="modal-actions full">
+      ${isEdit ? `<button type="button" class="btn warn-soft" data-del style="margin-inline-end:auto">${ic('trash')} حذف الطلب</button>` : ''}
+      <button type="button" class="btn ghost" data-close>رجوع</button>
+      <button type="submit" class="btn primary">${isEdit ? 'حفظ التعديلات' : 'حفظ الطلب'}</button>
+    </div>
+  </form>
+  <datalist id="dm-places">${[...app.places].map((p) => `<option value="${esc(p)}"></option>`).join('')}</datalist>`;
+
+  let vw = null;
+  const res = await showModal({
+    title: isEdit ? `الطلب ${o.ref}` : 'طلب توصيل جديد', html, wide: true,
+    onMount: (m, close) => {
+      const form = $('form', m), calc = $('[data-calc]', m), err = $('[data-err]', m);
+      vw = voiceWidget($('[data-voice]', m), o && o.voice_path);
+      const values = () => {
+        const fd = new FormData(form);
+        return {
+          date: fd.get('date'), time: fd.get('time'), customer_phone: cleanPhone(fd.get('customer_phone')), driver_id: fd.get('driver_id'),
+          pickup: String(fd.get('pickup') || '').trim(), dropoff: String(fd.get('dropoff') || '').trim(),
+          price: String(fd.get('price') || '').trim(), status: fd.get('status') || 'pending', notes: String(fd.get('notes') || '').trim(),
+        };
+      };
+      const after = (v) => {
+        const drv = app.drivers.find((d) => d.id === v.driver_id);
+        const c = round2(num(v.price) * r);
+        if (!drv) return { drv, c, bal: null };
+        let base = num(drv.balance);
+        if (isEdit && o.status === 'completed' && o.driver_id === drv.id) base += num(o.commission);
+        return { drv, c, bal: round2(v.status === 'completed' ? base - c : base) };
+      };
+      const upd = () => {
+        const v = values(); const a = after(v);
+        calc.className = 'calc full' + (a.bal != null && a.bal < 0 ? ' warn' : '');
+        calc.innerHTML = `<span>عمولتك (${pct(r)}): <b>${money(a.c)}</b> ${cur()}</span>`
+          + (a.drv ? `<span>رصيد السائق ${v.status === 'completed' ? 'بعد الخصم' : 'الحالي'}: <b>${money(a.bal)}</b> ${cur()}</span>` : '')
+          + (v.status === 'completed' ? '' : '<span>تُخصم العمولة من رصيد السائق عند إكمال الطلب فقط.</span>');
+      };
+      form.addEventListener('input', upd); form.addEventListener('change', upd); upd();
+
+      $('[data-add-driver]', m).onclick = async () => {
+        const nd = await driverForm();
+        if (!nd) return;
+        const sel = $('select[name=driver_id]', form);
+        sel.innerHTML = `<option value="">اختر السائق</option>${driverOptions(nd.id, o && o.driver_id)}`;
+        upd();
+      };
+      const del = $('[data-del]', m);
+      if (del) del.onclick = async () => {
+        if (!(await confirmBox(`حذف الطلب ${o.ref} نهائياً؟ إذا كان مكتملاً فستُعاد عمولته إلى رصيد السائق.`, { ok: 'حذف الطلب', danger: true }))) return;
+        try {
+          await app.api.deleteOrder(o.id);
+          if (o.voice_path) app.api.deleteVoice(o.voice_path);
+          app.orderIndex.delete(o.id);
+          toast(`تم حذف الطلب ${o.ref}.`);
+          close('deleted');
+        } catch (e) { err.textContent = errMsg(e); err.hidden = false; }
+      };
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const v = values();
+        const fail = (msg) => { err.textContent = msg; err.hidden = false; err.scrollIntoView({ block: 'nearest' }); };
+        if (vw.recording) return fail('أوقف التسجيل الصوتي أولاً.');
+        if (!v.date || !v.time) return fail('أدخل تاريخ ووقت الطلب.');
+        if (v.customer_phone.length < 4) return fail('أدخل رقم هاتف الزبون.');
+        if (!v.driver_id) return fail('اختر السائق.');
+        if (!v.pickup || !v.dropoff) return fail('أدخل مكان الانطلاق والوجهة.');
+        if (v.price === '' || !(num(v.price) >= 0)) return fail('أدخل سعر التوصيل.');
+        err.hidden = true;
+        const a = after(v);
+        if (v.status === 'completed' && a.bal != null && a.bal < 0 && !(isEdit && o.status === 'completed' && o.driver_id === v.driver_id && num(o.price) === num(v.price))) {
+          if (!(await confirmBox(`رصيد السائق لا يكفي لعمولة ${money(a.c)} ${curText()}. سيصبح الرصيد ${money(a.bal)}. هل تريد المتابعة؟`, { ok: 'متابعة' }))) return;
+        }
+        const btn = $('[type=submit]', form);
+        busy(btn, true, 'جارٍ الحفظ');
+        try {
+          let voice_path = o ? o.voice_path || null : null;
+          if (vw.file) voice_path = await app.api.uploadVoice(vw.file);
+          else if (vw.removed) voice_path = null;
+          const payload = {
+            ordered_at: new Date(`${v.date}T${v.time}`).toISOString(), customer_phone: v.customer_phone, driver_id: v.driver_id,
+            pickup: v.pickup, dropoff: v.dropoff, price: num(v.price), status: v.status, notes: v.notes || null, voice_path,
+          };
+          if (isEdit) payload.id = o.id;
+          const saved = await app.api.saveOrder(payload);
+          if (o && o.voice_path && o.voice_path !== voice_path) app.api.deleteVoice(o.voice_path);
+          app.places.add(v.pickup); app.places.add(v.dropoff);
+          app.orderIndex.set(saved.id, saved);
+          toast(isEdit ? `تم حفظ الطلب ${saved.ref}.` : `تم تسجيل الطلب ${saved.ref}.`);
+          close(saved);
+        } catch (ex) { busy(btn, false); fail(errMsg(ex)); }
+      });
+    },
+  });
+  if (vw) vw.dispose();
+  if (res) { invalidate(); await loadDrivers().catch(() => { }); render(); }
+  return res;
+}
+
+async function topupForm(driverId = null) {
+  if (!app.drivers.length) await loadDrivers();
+  if (!app.drivers.length) {
+    toast('أضف سائقاً أولاً.', 'warn');
+    return driverForm();
+  }
+  const html = `<form class="form-grid" novalidate>
+    <div class="field full"><span>السائق</span><div class="inline-row">
+      <select class="input" name="driver_id" required aria-label="السائق"><option value="">اختر السائق</option>${driverOptions(driverId)}</select>
+      <button type="button" class="icon-btn" data-add-driver aria-label="إضافة سائق جديد">${ic('plus')}</button></div></div>
+    <label class="field"><span>مبلغ الشحن (${cur()})</span><input class="input" type="number" inputmode="decimal" min="0" step="any" name="amount" required></label>
+    <label class="field"><span>التاريخ</span><input class="input" type="date" name="date" value="${today()}" required></label>
+    <div class="field full"><span>طريقة الدفع</span><div class="seg" style="flex-wrap:wrap">${METHODS.map((mt, i) => `<label><input type="radio" name="method" value="${esc(mt)}" ${i === 0 ? 'checked' : ''}><span>${esc(mt)}</span></label>`).join('')}</div></div>
+    <div class="calc full" data-calc aria-live="polite"></div>
+    <label class="field full"><span>ملاحظات</span><input class="input" name="notes" autocomplete="off"></label>
+    <p class="err full" data-err hidden></p>
+    <div class="modal-actions full"><button type="button" class="btn ghost" data-close>رجوع</button><button type="submit" class="btn primary">حفظ الشحن</button></div>
+  </form>`;
+  const res = await showModal({
+    title: 'شحن رصيد سائق', html,
+    onMount: (m, close) => {
+      const form = $('form', m), calc = $('[data-calc]', m), err = $('[data-err]', m);
+      const upd = () => {
+        const fd = new FormData(form); const d = app.drivers.find((x) => x.id === fd.get('driver_id'));
+        calc.hidden = !d;
+        if (d) calc.innerHTML = `<span>الرصيد الحالي: <b>${money(d.balance)}</b></span><span>بعد الشحن: <b>${money(num(d.balance) + num(fd.get('amount')))}</b> ${cur()}</span>`;
+      };
+      form.addEventListener('input', upd); form.addEventListener('change', upd); upd();
+      $('[data-add-driver]', m).onclick = async () => {
+        const nd = await driverForm(); if (!nd) return;
+        $('select[name=driver_id]', form).innerHTML = `<option value="">اختر السائق</option>${driverOptions(nd.id)}`; upd();
+      };
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const fd = new FormData(form);
+        const d = app.drivers.find((x) => x.id === fd.get('driver_id'));
+        const amount = num(fd.get('amount'));
+        const fail = (msg) => { err.textContent = msg; err.hidden = false; };
+        if (!d) return fail('اختر السائق.');
+        if (!(amount > 0)) return fail('أدخل مبلغ الشحن.');
+        const date = fd.get('date') || today();
+        const when = date === today() ? new Date() : new Date(`${date}T12:00`);
+        const btn = $('[type=submit]', form);
+        busy(btn, true, 'جارٍ الحفظ');
+        try {
+          await app.api.saveTopup({ driver_id: d.id, amount, method: fd.get('method') || null, notes: String(fd.get('notes') || '').trim() || null, topup_at: when.toISOString() });
+          toast(`تم شحن ${money(amount)} ${curText()} لـ ${dtext(d)}. الرصيد الجديد: ${money(num(d.balance) + amount)}.`);
+          close(true);
+        } catch (ex) { busy(btn, false); fail(errMsg(ex)); }
+      });
+    },
+  });
+  if (res) { invalidate(); await loadDrivers().catch(() => { }); render(); }
+  return res;
+}
+
+async function driverForm(d = null) {
+  const isEdit = !!d;
+  const html = `<form class="form-grid" novalidate>
+    <label class="field"><span>رقم هاتف السائق</span><input class="input" type="tel" inputmode="tel" dir="ltr" name="phone" value="${esc(d ? d.phone : '')}" autocomplete="off" required></label>
+    <label class="field"><span>الاسم</span><input class="input" name="name" value="${esc(d ? d.name || '' : '')}" autocomplete="off"></label>
+    ${isEdit ? `<div class="field full"><span>الحالة</span><div class="seg"><label><input type="radio" name="active" value="1" ${d.active ? 'checked' : ''}><span>نشط</span></label>
+      <label><input type="radio" name="active" value="0" ${d.active ? '' : 'checked'}><span>موقوف</span></label></div>
+      <small>السائق الموقوف لا يظهر عند تسجيل طلب جديد، ويبقى سجله محفوظاً.</small></div>` : ''}
+    <label class="field full"><span>ملاحظات</span><input class="input" name="notes" value="${esc(d ? d.notes || '' : '')}" autocomplete="off"></label>
+    <p class="err full" data-err hidden></p>
+    <div class="modal-actions full">
+      ${isEdit ? `<button type="button" class="btn warn-soft" data-del style="margin-inline-end:auto">${ic('trash')} حذف السائق</button>` : ''}
+      <button type="button" class="btn ghost" data-close>رجوع</button>
+      <button type="submit" class="btn primary">${isEdit ? 'حفظ التعديلات' : 'إضافة السائق'}</button></div>
+  </form>`;
+  const res = await showModal({
+    title: isEdit ? 'تعديل بيانات السائق' : 'سائق جديد', html,
+    onMount: (m, close) => {
+      const form = $('form', m), err = $('[data-err]', m);
+      const fail = (msg) => { err.textContent = msg; err.hidden = false; };
+      const del = $('[data-del]', m);
+      if (del) del.onclick = async () => {
+        if (!(await confirmBox(`حذف السائق ${dtext(d)}؟`, { ok: 'حذف', danger: true }))) return;
+        try { await app.api.deleteDriver(d.id); toast('تم حذف السائق.'); close('deleted'); } catch (e) { fail(errMsg(e)); }
+      };
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const fd = new FormData(form);
+        const phone = cleanPhone(fd.get('phone'));
+        if (phone.length < 4) return fail('أدخل رقم هاتف السائق.');
+        const btn = $('[type=submit]', form);
+        busy(btn, true, 'جارٍ الحفظ');
+        try {
+          const saved = await app.api.saveDriver({
+            id: d ? d.id : undefined, phone, name: String(fd.get('name') || '').trim(), notes: String(fd.get('notes') || '').trim(),
+            active: isEdit ? fd.get('active') === '1' : true,
+          });
+          await loadDrivers();
+          toast(isEdit ? 'تم حفظ بيانات السائق.' : `تمت إضافة السائق ${dtext(saved)}.`);
+          close(saved);
+        } catch (ex) { busy(btn, false); fail(errMsg(ex)); }
+      });
+    },
+  });
+  if (res === 'deleted') { await loadDrivers().catch(() => { }); location.hash = 'drivers'; render(); return null; }
+  if (res && !$('.modal-wrap:not(.closing)')) { invalidate(); render(); }
+  return res;
+}
+
+/* =====================================================================
+   ACTIONS
+   ===================================================================== */
+const ACTIONS = {
+  'new-order': () => orderForm(),
+  'edit-order': async (id) => { let o = app.orderIndex.get(id); if (o) return orderForm(o); },
+  'complete-order': async (id) => {
+    const o = app.orderIndex.get(id); if (!o) return;
+    if (!app.drivers.length) await loadDrivers();
+    const d = app.drivers.find((x) => x.id === o.driver_id);
+    const c = round2(num(o.price) * num(o.commission_rate));
+    const after = d ? round2(num(d.balance) - c) : 0;
+    if (d && after < 0 && !(await confirmBox(`رصيد ${dtext(d)} هو ${money(d.balance)} ${curText()} ولا يكفي لعمولة ${money(c)}. سيصبح الرصيد ${money(after)}. هل تريد إكمال الطلب؟`, { ok: 'إكمال الطلب' }))) return;
+    await app.api.setOrderStatus(id, 'completed');
+    toast(`اكتمل الطلب ${o.ref}، وخُصمت عمولة ${money(c)} ${curText()} من رصيد السائق.`);
+    invalidate(); await loadDrivers(); render();
+  },
+  'cancel-order': async (id) => {
+    const o = app.orderIndex.get(id); if (!o) return;
+    if (!(await confirmBox(`إلغاء الطلب ${o.ref}؟ لن تُحسب عليه أي عمولة.`, { ok: 'إلغاء الطلب', danger: true }))) return;
+    await app.api.setOrderStatus(id, 'cancelled');
+    toast(`تم إلغاء الطلب ${o.ref}.`);
+    invalidate(); await loadDrivers(); render();
+  },
+  'play-voice': async (id) => {
+    const o = app.orderIndex.get(id); if (!o || !o.voice_path) return;
+    let url = null, msg = '';
+    try { url = await app.api.voiceUrl(o.voice_path); } catch (e) { msg = errMsg(e); }
+    showModal({
+      title: `الرسالة الصوتية – ${o.ref}`,
+      html: url ? `<audio controls autoplay src="${esc(url)}" style="width:100%"></audio>
+        <p class="muted" style="font-size:14px">إذا لم يعمل التشغيل، <a href="${esc(url)}" target="_blank" rel="noopener">افتح الملف</a>.</p>`
+        : `<p class="muted">${esc(msg || 'الرسالة غير متوفرة في الوضع التجريبي بعد إعادة التحميل.')}</p>`,
+    });
+  },
+  'new-topup': (id, el) => topupForm(el.dataset.driver || (app.view === 'driver' ? app.driverId : null)),
+  'delete-topup': async (id) => {
+    if (!(await confirmBox('حذف عملية الشحن هذه؟ سيُخصم مبلغها من رصيد السائق.', { ok: 'حذف', danger: true }))) return;
+    await app.api.deleteTopup(id);
+    toast('تم حذف عملية الشحن.');
+    invalidate(); await loadDrivers(); render();
+  },
+  'new-driver': () => driverForm(),
+  'edit-driver': async (id) => { const d = app.drivers.find((x) => x.id === id) || (await app.api.getDriver(id)); return driverForm(d); },
+  'open-driver': (id) => { app.driverId = id; if (location.hash === '#driver') render(); else location.hash = 'driver'; },
+  'back-drivers': () => { location.hash = 'drivers'; },
+  'print': () => printPage(),
+  'retry': () => render(),
+  'export-orders': () => downloadCSV(`orders-${today()}.csv`, [
+    ['رقم المعاملة', 'التاريخ', 'الوقت', 'رقم الزبون', 'رقم السائق', 'اسم السائق', 'من', 'إلى', 'سعر التوصيل', 'الحالة', 'العمولة', 'ملاحظات'],
+    ...(app.last.orders || []).map((o) => [o.ref, fmtDate(o.ordered_at), fmtTime(o.ordered_at), o.customer_phone, o.driver ? o.driver.phone : '', o.driver ? o.driver.name || '' : '',
+      o.pickup, o.dropoff, num(o.price), (STATUS[o.status] || {}).label, num(o.commission), o.notes || '']),
+  ]),
+  'export-topups': () => downloadCSV(`topups-${today()}.csv`, [
+    ['التاريخ', 'الوقت', 'رقم السائق', 'اسم السائق', 'طريقة الدفع', 'المبلغ', 'ملاحظات'],
+    ...(app.last.topups || []).map((t) => [fmtDate(t.topup_at), fmtTime(t.topup_at), t.driver ? t.driver.phone : '', t.driver ? t.driver.name || '' : '', t.method || '', num(t.amount), t.notes || '']),
+  ]),
+  'export-drivers': () => downloadCSV(`drivers-${today()}.csv`, [
+    ['رقم السائق', 'الاسم', 'الحالة', 'مجموع الشحن', 'مجموع العمولات', 'الرصيد المتبقي', 'طلبات مكتملة', 'قيد التنفيذ'],
+    ...(app.last.drivers || app.drivers).map((d) => [d.phone, d.name || '', d.active ? 'نشط' : 'موقوف', num(d.total_topups), num(d.total_commission), num(d.balance), num(d.completed_orders), num(d.pending_orders)]),
+  ]),
+  'export-daily': () => downloadCSV(`daily-${app.f.reports.month.slice(0, 7)}.csv`, [
+    ['اليوم', 'طلبات مكتملة', 'قيمة التوصيل', 'العمولة', 'الشحن'],
+    ...(app.last.daily || []).map((r) => [fmtDate(r.day), num(r.completed_orders), num(r.orders_value), num(r.commission), num(r.topups)]),
+  ]),
+  'export-monthly': () => downloadCSV(`monthly-${app.f.reports.year}.csv`, [
+    ['الشهر', 'طلبات مكتملة', 'قيمة التوصيل', 'العمولة', 'الشحن'],
+    ...(app.last.monthly || []).map((r) => [MONTHS[num(r.month) - 1], num(r.completed_orders), num(r.orders_value), num(r.commission), num(r.topups)]),
+  ]),
+  'logout': async () => {
+    if (!(await confirmBox('تسجيل الخروج من التطبيق على هذا الجهاز؟', { ok: 'تسجيل الخروج' }))) return;
+    await app.api.signOut(); renderLogin();
+  },
+  'change-connection': async () => {
+    if (!(await confirmBox('فصل التطبيق عن قاعدة البيانات الحالية على هذا الجهاز؟ لن تُحذف أي بيانات من Supabase.', { ok: 'فصل' }))) return;
+    try { await app.api.signOut(); } catch (e) { /* ignoré */ }
+    local.del('dm.config'); local.del('dm.mode'); boot();
+  },
+  'leave-demo': () => { local.del('dm.mode'); boot(); },
+  'reset-demo': async () => {
+    if (!(await confirmBox('استبدال كل البيانات التجريبية على هذا الجهاز ببيانات جديدة؟', { ok: 'إعادة البيانات', danger: true }))) return;
+    app.api.reset(); invalidate(); app.orderIndex.clear(); await loadDrivers(); toast('تمت إعادة البيانات التجريبية.'); render();
+  },
+};
+
+document.addEventListener('click', async (e) => {
+  if (e.target.closest('a[data-tel]')) return;
+  const el = e.target.closest('[data-action]');
+  if (!el || !ACTIONS[el.dataset.action]) return;
+  e.preventDefault();
+  if (el.dataset.busy) return;
+  el.dataset.busy = '1';
+  try { await ACTIONS[el.dataset.action](el.dataset.id, el, e); }
+  catch (err) { console.error(err); toast(errMsg(err), 'bad'); }
+  finally { delete el.dataset.busy; }
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Enter' && e.key !== ' ') return;
+  const el = e.target.closest && e.target.closest('[data-action][tabindex]');
+  if (el && el === e.target) { e.preventDefault(); el.click(); }
+});
+window.addEventListener('hashchange', () => { if ($('#main')) render(); });
+
+/* =====================================================================
+   DÉMARRAGE : configuration, connexion
+   ===================================================================== */
+const gate = (inner) => { $('#root').innerHTML = `<div class="gate"><div class="gate-card">
+  <div class="brand"><div class="brand-mark">${ic('truck')}</div><div class="brand-text"><b>Delivery Manager</b><span>إدارة التوصيل وأرصدة السائقين</span></div></div>${inner}</div></div>`; };
+
+function copySQL() {
+  const fallback = () => showModal({
+    title: 'كود إعداد قاعدة البيانات', wide: true,
+    html: `<p class="muted">حدد النص كله وانسخه، ثم الصقه في Supabase ← SQL Editor.</p>
+      <textarea class="input" readonly rows="14" dir="ltr" style="font-family:ui-monospace,Menlo,monospace;font-size:12px">${esc(SETUP_SQL)}</textarea>`,
+    onMount: (m) => { const t = $('textarea', m); t.addEventListener('focus', () => t.select()); },
+  });
+  try {
+    navigator.clipboard.writeText(SETUP_SQL).then(() => toast('تم نسخ كود الإعداد. الصقه في SQL Editor ثم اضغط Run.'), fallback);
+  } catch (e) { fallback(); }
+}
+
+function renderSetup() {
+  gate(`<h1>إعداد التطبيق</h1>
+    <p class="muted">اربط التطبيق بقاعدة بيانات Supabase المجانية لحفظ الطلبات والأرصدة بأمان على الإنترنت، أو جرّبه أولاً ببيانات تجريبية.</p>
+    <ol class="steps">
+      <li>أنشئ مشروعاً مجانياً على <span class="ltr">supabase.com</span>.</li>
+      <li>افتح <span class="ltr">SQL Editor</span> والصق كود الإعداد ثم اضغط <span class="ltr">Run</span>.
+        <div style="margin-top:8px"><button type="button" class="btn sm" data-copy-sql>${ic('copy')} نسخ كود الإعداد</button></div></li>
+      <li>من <span class="ltr">Authentication → Users</span> أضف حساب المسير <span class="ltr">(Add user)</span> مع تفعيل <span class="ltr">Auto Confirm</span>.</li>
+      <li>من <span class="ltr">Project Settings → API</span> انسخ <span class="ltr">Project URL</span> والمفتاح العام <span class="ltr">(anon / publishable)</span>.</li>
+    </ol>
+    <form class="split" novalidate data-setup>
+      <label class="field"><span>Project URL</span><input class="input" name="url" dir="ltr" placeholder="https://xxxx.supabase.co" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
+      <label class="field"><span>المفتاح العام (anon key)</span><textarea class="input" name="key" dir="ltr" rows="3" autocomplete="off" autocapitalize="off" spellcheck="false"></textarea></label>
+      <p class="err" data-err hidden></p>
+      <button type="submit" class="btn primary lg">ربط ومتابعة</button>
+    </form>
+    <p class="or">أو</p>
+    <button type="button" class="btn lg" data-demo>تجربة التطبيق ببيانات تجريبية</button>`);
+  $('[data-copy-sql]').onclick = copySQL;
+  $('[data-demo]').onclick = () => { local.set('dm.mode', 'demo'); boot(); };
+  $('[data-setup]').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const fd = new FormData(e.target);
+    const url = String(fd.get('url') || '').trim().replace(/\/+$/, '');
+    const key = String(fd.get('key') || '').replace(/\s+/g, '');
+    const err = $('[data-err]');
+    if (!/^https:\/\/[^\s/]+\.[^\s/]+$/.test(url)) { err.textContent = 'أدخل رابط المشروع كاملاً، مثل https://xxxx.supabase.co'; err.hidden = false; return; }
+    if (key.length < 20) { err.textContent = 'أدخل المفتاح العام (anon key) كما هو في Supabase.'; err.hidden = false; return; }
+    local.set('dm.config', { url, key }); local.set('dm.mode', 'cloud');
+    boot();
+  });
+}
+
+function renderLogin() {
+  gate(`<h1>تسجيل الدخول</h1>
+    <form class="split" novalidate data-login>
+      <label class="field"><span>البريد الإلكتروني</span><input class="input" type="email" name="email" dir="ltr" autocomplete="username" autocapitalize="off" required></label>
+      <label class="field"><span>كلمة المرور</span><input class="input" type="password" name="password" dir="ltr" autocomplete="current-password" required></label>
+      <p class="err" data-err hidden></p>
+      <button type="submit" class="btn primary lg">دخول</button>
+    </form>
+    ${app.cfg && !app.cfg.fixed ? '<button type="button" class="btn ghost" data-reset-cfg>تغيير إعداد الاتصال</button>' : ''}`);
+  const rc = $('[data-reset-cfg]');
+  if (rc) rc.onclick = () => { local.del('dm.config'); local.del('dm.mode'); boot(); };
+  $('[data-login]').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fd = new FormData(e.target);
+    const err = $('[data-err]'), btn = $('[type=submit]', e.target);
+    busy(btn, true, 'جارٍ الدخول');
+    try {
+      await app.api.signIn(String(fd.get('email')).trim(), String(fd.get('password')));
+      const s = await app.api.session();
+      app.user = s && s.user;
+      start();
+    } catch (ex) { busy(btn, false); err.textContent = errMsg(ex); err.hidden = false; }
+  });
+}
+
+function renderGateError(msg, canReset, canLogout) {
+  gate(`<h1>تعذر تشغيل التطبيق</h1><p class="notice bad">${esc(msg)}</p>
+    ${msg.includes('SQL') ? `<button type="button" class="btn" data-copy-sql>${ic('copy')} نسخ كود الإعداد</button>` : ''}
+    <button type="button" class="btn primary lg" data-retry>إعادة المحاولة</button>
+    ${canLogout ? `<button type="button" class="btn" data-logout>${ic('logout')} تسجيل الخروج</button>` : ''}
+    ${canReset !== false && !(app.cfg && app.cfg.fixed) ? '<button type="button" class="btn ghost" data-reset-cfg>تغيير إعداد الاتصال</button>' : ''}`);
+  $('[data-retry]').onclick = boot;
+  const lo = $('[data-logout]'); if (lo) lo.onclick = async () => { try { await app.api.signOut(); } catch (e) { /* ignoré */ } boot(); };
+  const c = $('[data-copy-sql]'); if (c) c.onclick = copySQL;
+  const r = $('[data-reset-cfg]'); if (r) r.onclick = () => { local.del('dm.config'); local.del('dm.mode'); boot(); };
+}
+
+async function start() {
+  try { app.settings = await app.api.getSettings(); }
+  catch (e) {
+    console.error(e);
+    if (e && e.code === 'PGRST116') return renderGateError('هذا الحساب لا يملك صلاحية الوصول إلى بيانات التطبيق. سجّل الدخول بحساب المسير.', true, true);
+    return renderGateError(errMsg(e), true, app.api.mode === 'cloud');
+  }
+  renderShell();
+  render();
+}
+
+async function boot() {
+  $('#root').innerHTML = '<div class="loading" style="min-height:100vh"><span class="spin"></span></div>';
+  app.orderIndex.clear(); app.drivers = []; invalidate(); app.places = new Set();
+  const fixed = CONFIG.SUPABASE_URL && CONFIG.SUPABASE_ANON_KEY;
+  const cfg = fixed ? { url: CONFIG.SUPABASE_URL.trim().replace(/\/+$/, ''), key: CONFIG.SUPABASE_ANON_KEY.trim(), fixed: true } : local.get('dm.config');
+  const mode = DEMO_BUILD ? 'demo' : fixed ? 'cloud' : local.get('dm.mode');
+  app.cfg = null;
+  if (mode === 'demo') { app.api = new DemoAPI(); app.user = { email: 'demo' }; return start(); }
+  if (mode !== 'cloud' || !cfg) return renderSetup();
+  app.cfg = cfg;
+  try {
+    if (!window.supabase) await loadScript(SUPABASE_JS);
+    app.api = new CloudAPI(cfg.url, cfg.key);
+  } catch (e) {
+    console.error(e);
+    return renderGateError('تعذر تحميل مكتبة الاتصال بقاعدة البيانات. تحقق من الإنترنت ثم أعد المحاولة.');
+  }
+  app.api.onAuthLost(() => { if ($('#main')) renderLogin(); });
+  let session = null;
+  try { session = await app.api.session(); } catch (e) { /* ignoré */ }
+  if (!session) return renderLogin();
+  app.user = session.user;
+  start();
+}
+
+boot();
+
+</script>
+</body>
+</html>
